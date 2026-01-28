@@ -45,6 +45,10 @@ dev-docs/                    # All documentation
 
 scripts/
 └── generate_summary.py      # Generates incidents-summary.json
+
+hooks/
+├── pre-commit               # Validates incidents, regenerates summary
+└── install-hooks.sh         # Install hooks in a state repo
 ```
 
 ## The 5 Incident Categories
@@ -58,6 +62,27 @@ There are exactly 5 incident types. Use ONLY these:
 | `immigrants` | People without legal status: undocumented, asylum-seekers, etc. |
 | `schools-hospitals` | Actions at/near schools or hospitals |
 | `response` | Federal government (DHS/ICE/CBP) official statements ONLY |
+
+## Setting Up a State Repo
+
+After cloning a state repo, you MUST:
+
+1. **Create the symlink** to the master repo:
+   ```bash
+   ln -s ../GIT_US_ICE_WITNESS us-ice-witness
+   ```
+
+2. **Install git hooks** (REQUIRED for auto-generating incidents-summary.json):
+   ```bash
+   ./us-ice-witness/hooks/install-hooks.sh
+   ```
+
+The pre-commit hook will:
+- Validate incident frontmatter against the schema
+- Auto-regenerate `docs/data/incidents-summary.json`
+- Stage the updated summary file
+
+**Without the hook installed, incidents-summary.json won't update on commit.**
 
 ## Adding an Incident (in a state repo)
 
