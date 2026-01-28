@@ -38,18 +38,6 @@
 
     <title id="page-title">ICE Witness - ICE and CBP Civil Rights Incidents</title>
     <link rel="stylesheet" href="/css/style.css?v=1769565504">
-    <!-- SPLASH DISABLED
-    <script>
-        (function() {
-            var last = localStorage.getItem('splashLastShown');
-            var now = Date.now();
-            if (last && (now - parseInt(last, 10)) < 86400000) {
-                document.documentElement.classList.add('skip-splash');
-            }
-        })();
-    </script>
-    <style>.skip-splash .splash-screen { display: none !important; }</style>
-    -->
 
     <!-- Structured Data for SEO - populated by state-config.js -->
     <script type="application/ld+json" id="schema-website">
@@ -157,35 +145,10 @@
         </symbol>
     </svg>
 
-    <!-- Opening Splash Montage - DISABLED
-    <div class="splash-screen" id="splash">
-        <div class="splash-montage">
-            <div class="splash-image splash-1"></div>
-            <div class="splash-image splash-2"></div>
-            <div class="splash-image splash-3"></div>
-            <div class="splash-image splash-4"></div>
-            <div class="splash-image splash-5"></div>
-        </div>
-        <div class="splash-overlay">
-            <h1 class="splash-title">MN ICE Witness</h1>
-            <p class="splash-subtitle">ICE incidents in Minnesota. Sourced.</p>
-        </div>
-        <div class="splash-skip">Tap or swipe to skip</div>
-        <div class="splash-progress"></div>
-    </div>
-    -->
-
     <header class="site-header">
         <div class="header-inner">
             <div class="masthead">
-                <h1 class="site-title"><span id="state-code">XX</span> ICE Witness
-                    <select id="state-selector" class="state-selector" aria-label="Select state">
-                        <option value="">Other States</option>
-                        <option value="https://mn-ice-witness.org">MN</option>
-                        <option value="https://co-ice-witness.pages.dev">CO</option>
-                        <option value="https://al-ice-witness.pages.dev">AL</option>
-                    </select>
-                </h1>
+                <h1 class="site-title"><span id="state-code">XX</span> ICE Witness <a href="#about" class="about-link" id="about-link">About</a></h1>
                 <p class="site-tagline">A Sourced Listing of ICE Incidents in <span id="state-name">State</span></p>
             </div>
         </div>
@@ -324,8 +287,7 @@
     </div>
 
     <footer class="site-footer" id="site-footer">
-        <a href="#about" class="footer-about" id="about-link">About</a> |
-        <a href="mailto:tips@example.org" class="footer-cta" id="footer-email">Contact us with tips</a>
+        <a href="mailto:tips@ice-witness.org" class="footer-cta" id="footer-email">Contact us with any new sourced incidents or missing sources/media.</a>
     </footer>
 
     <script src="/js/marked.min.js"></script>

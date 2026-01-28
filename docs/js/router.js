@@ -3,9 +3,10 @@
  *
  * Handles path-based URL routing with legacy hash URL support.
  * Builds clean URLs like /entry/slug, /about/section, /list/category.
+ * State is determined by subdomain (co.ice-witness.org), not URL path.
  *
  * Global: Router
- * Depends on: Nothing (standalone, but uses App.aboutSections at runtime)
+ * Depends on: Nothing (standalone)
  */
 
 const Router = {
@@ -16,54 +17,30 @@ const Router = {
     aboutSections: ['federal-position', 'the-data', 'what-this-site-documents', 'purpose', 'sources-used', 'investigations', 'operation-parris', 'trustworthiness', 'legal-observation'],
 
     /**
-     * Get current state prefix for URLs
-     * @returns {string} State prefix like '/mn' or empty string
-     */
-    getStatePrefix() {
-        if (window.StateConfig && StateConfig.currentState) {
-            return '/' + StateConfig.currentState;
-        }
-        return '';
-    },
-
-    /**
-     * Build a clean path-based URL with state prefix
+     * Build a clean path-based URL
+     * State is in subdomain, so no state prefix needed in path
      * @param {string} type - 'incident', 'about', 'list', 'media', 'unverified', or 'home'
      * @param {string|null} slug - Optional slug/section/category
      * @returns {string} URL path
      */
     buildUrl(type, slug = null) {
-        const prefix = this.getStatePrefix();
         switch (type) {
             case 'incident':
-                return `${prefix}/entry/${slug}`;
+                return `/entry/${slug}`;
             case 'about':
-                return slug ? `${prefix}/about/${slug}` : `${prefix}/about`;
+                return slug ? `/about/${slug}` : `/about`;
             case 'list':
-                return slug ? `${prefix}/list/${slug}` : `${prefix}/list`;
+                return slug ? `/list/${slug}` : `/list`;
             case 'media':
-                return `${prefix}/media`;
+                return `/media`;
             case 'new-updated':
-                return `${prefix}/new-updated/${slug}`;
+                return `/new-updated/${slug}`;
             case 'unverified':
-                return `${prefix}/unverified`;
+                return `/unverified`;
             case 'home':
             default:
-                return prefix || '/';
+                return '/';
         }
-    },
-
-    /**
-     * Strip state prefix from path (e.g., '/mn/list' -> '/list')
-     * @param {string} path - URL path
-     * @returns {string} Path without state prefix
-     */
-    stripStatePrefix(path) {
-        const match = path.match(/^\/([a-z]{2})(\/.*)?$/i);
-        if (match && window.StateConfig && StateConfig.states[match[1].toLowerCase()]) {
-            return match[2] || '/';
-        }
-        return path;
     },
 
     /**
@@ -73,8 +50,7 @@ const Router = {
      * @returns {Object} Route object with type, slug/section/category, filter, and legacy flag
      */
     parseUrl(url = window.location) {
-        const rawPath = url.pathname;
-        const path = this.stripStatePrefix(rawPath);
+        const path = url.pathname;
         const hash = url.hash.slice(1);
         const filter = this.parseFilter(url);
 
