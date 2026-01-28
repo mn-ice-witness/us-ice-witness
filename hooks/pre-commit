@@ -1,0 +1,38 @@
+#!/bin/bash
+# Pre-commit hook for state data repositories
+# This hook runs from the state repo and calls scripts from the us-ice-witness symlink
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+US_SCRIPTS="$REPO_ROOT/us-ice-witness/scripts"
+
+# Check if us-ice-witness symlink exists
+if [ ! -d "$US_SCRIPTS" ]; then
+    echo "Warning: us-ice-witness/scripts not found. Skipping pre-commit validation."
+    echo "To enable validation, create a symlink: ln -s /path/to/GIT_US_ICE_WITNESS us-ice-witness"
+    exit 0
+fi
+
+# Get list of staged incident files
+STAGED_INCIDENTS=$(git diff --cached --name-only --diff-filter=ACM | grep "docs/incidents/.*\.md$" || true)
+
+if [ -n "$STAGED_INCIDENTS" ]; then
+    echo "Validating incident frontmatter..."
+
+    # Run generate_summary.py which validates all incidents
+    # If validation fails, it will exit non-zero
+    cd "$REPO_ROOT"
+    python3 "$US_SCRIPTS/generate_summary.py" > /dev/null 2>&1 || {
+        echo "❌ Incident validation failed. Run the following to see errors:"
+        echo "   python3 us-ice-witness/scripts/generate_summary.py"
+        exit 1
+    }
+
+    echo "✓ Incident validation passed"
+
+    # Add the updated summary to the commit
+    if [ -f "$REPO_ROOT/docs/data/incidents-summary.json" ]; then
+        git add "$REPO_ROOT/docs/data/incidents-summary.json"
+    fi
+fi

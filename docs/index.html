@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="description" id="meta-description" content="Up-to-date sourced listing of ICE and CBP civil rights incidents. Each incident includes multiple news sources and official statements.">
+    <meta name="keywords" content="ICE, CBP, civil rights, human rights, immigration enforcement, ICE incidents">
+    <meta name="author" id="meta-author" content="ICE Witness">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" id="canonical-link" href="">
+
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico?v=1769565504">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png?v=1769565504">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png?v=1769565504">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png?v=1769565504">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#121212">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" id="og-title" content="ICE Witness - A Sourced Listing of ICE Incidents">
+    <meta property="og:description" id="og-description" content="Up-to-date sourced listing of ICE and CBP civil rights incidents">
+    <meta property="og:image" id="og-image" content="/assets/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:url" id="og-url" content="">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" id="twitter-title" content="ICE Witness - A Sourced Listing of ICE Incidents">
+    <meta name="twitter:description" id="twitter-description" content="Up-to-date sourced listing of ICE and CBP civil rights incidents">
+    <meta name="twitter:image" id="twitter-image" content="/assets/og-image.jpg">
+
+    <title id="page-title">ICE Witness - ICE and CBP Civil Rights Incidents</title>
+    <link rel="stylesheet" href="/css/style.css?v=1769565504">
+    <!-- SPLASH DISABLED
+    <script>
+        (function() {
+            var last = localStorage.getItem('splashLastShown');
+            var now = Date.now();
+            if (last && (now - parseInt(last, 10)) < 86400000) {
+                document.documentElement.classList.add('skip-splash');
+            }
+        })();
+    </script>
+    <style>.skip-splash .splash-screen { display: none !important; }</style>
+    -->
+
+    <!-- Structured Data for SEO - populated by state-config.js -->
+    <script type="application/ld+json" id="schema-website">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "ICE Witness",
+        "url": "",
+        "description": "Up-to-date sourced listing of ICE and CBP civil rights incidents",
+        "publisher": {
+            "@type": "Organization",
+            "name": "ICE Witness",
+            "url": ""
+        }
+    }
+    </script>
+    <script type="application/ld+json" id="schema-dataset">
+    {
+        "@context": "https://schema.org",
+        "@type": "Dataset",
+        "name": "ICE/CBP Civil Rights Incident Listing",
+        "description": "Up-to-date sourced listing of ICE and CBP civil rights incidents. Each incident includes multiple news sources and official statements.",
+        "url": "",
+        "keywords": ["ICE", "CBP", "civil rights", "human rights"],
+        "license": "https://creativecommons.org/licenses/by/4.0/",
+        "spatialCoverage": {
+            "@type": "Place",
+            "name": "United States"
+        },
+        "temporalCoverage": "2025-12/.."
+    }
+    </script>
+</head>
+<body>
+    <!-- SVG Symbol Definitions (hidden, reused via <use href="#icon-name"/>) -->
+    <svg style="display:none" aria-hidden="true">
+        <!-- Camera icon - media indicator -->
+        <symbol id="icon-camera" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+        </symbol>
+        <!-- Eye icon - viewed indicator -->
+        <symbol id="icon-eye" viewBox="0 0 24 24">
+            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" fill="currentColor"/>
+        </symbol>
+        <!-- Link icon - share/copy link -->
+        <symbol id="icon-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </symbol>
+        <!-- Play icon (triangle) -->
+        <symbol id="icon-play" viewBox="0 0 24 24">
+            <polygon points="6,4 20,12 6,20" fill="currentColor"/>
+        </symbol>
+        <!-- Pause icon (two bars) -->
+        <symbol id="icon-pause" viewBox="0 0 24 24">
+            <rect x="6" y="4" width="4" height="16" rx="1" fill="currentColor"/>
+            <rect x="14" y="4" width="4" height="16" rx="1" fill="currentColor"/>
+        </symbol>
+        <!-- Restart icon (circular arrow) -->
+        <symbol id="icon-restart" viewBox="0 0 24 24">
+            <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" fill="currentColor"/>
+        </symbol>
+        <!-- Speaker icon (volume) -->
+        <symbol id="icon-speaker" viewBox="0 0 24 24">
+            <path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/>
+            <path class="speaker-waves" d="M18 12c0-2.05-1.18-3.82-2.9-4.68v9.36c1.72-.86 2.9-2.63 2.9-4.68z" fill="currentColor"/>
+        </symbol>
+        <!-- Mute X icon -->
+        <symbol id="icon-mute-x" viewBox="0 0 24 24">
+            <path d="M24 10.5l-2.5-2.5-2.5 2.5-2.5-2.5-2 2 2.5 2.5-2.5 2.5 2 2 2.5-2.5 2.5 2.5 2-2-2.5-2.5 2.5-2.5z" fill="currentColor"/>
+        </symbol>
+        <!-- Fullscreen enter icon -->
+        <symbol id="icon-fullscreen-enter" viewBox="0 0 24 24">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" fill="currentColor"/>
+        </symbol>
+        <!-- Fullscreen exit icon -->
+        <symbol id="icon-fullscreen-exit" viewBox="0 0 24 24">
+            <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" fill="currentColor"/>
+        </symbol>
+        <!-- Trust/shield icon -->
+        <symbol id="icon-trust" viewBox="0 0 24 24">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z" fill="currentColor"/>
+        </symbol>
+        <!-- Search icon -->
+        <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="10" cy="10" r="7"/>
+            <path d="M21 21l-5-5"/>
+        </symbol>
+        <!-- Social media icons -->
+        <symbol id="icon-facebook" viewBox="0 0 24 24">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="currentColor"/>
+        </symbol>
+        <symbol id="icon-x" viewBox="0 0 24 24">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="currentColor"/>
+        </symbol>
+        <symbol id="icon-instagram" viewBox="0 0 24 24">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" fill="currentColor"/>
+        </symbol>
+        <symbol id="icon-threads" viewBox="0 0 192 192">
+            <path d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.229c8.249.053 14.474 2.452 18.503 7.129 2.932 3.405 4.893 8.111 5.864 14.05-7.314-1.243-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.681 22.231-5.436 29.049-14.127 5.178-6.6 8.453-15.153 9.899-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C35.236 139.966 29.808 120.682 29.6 96c.208-24.682 5.636-43.966 16.129-57.317C56.944 24.425 74.195 17.11 97.004 16.94c23.024.17 40.66 7.52 52.404 21.853 5.712 6.979 10.097 15.66 13.07 25.792l14.944-4.003c-3.526-12.07-8.872-22.556-16.018-31.285C147.382 12.618 125.064 3.27 97.04 3.07h-.075C69.089 3.27 47.151 12.66 33.251 29.407 17.87 47.9 10.041 73.707 9.8 96.046v.105c.241 22.339 8.07 48.146 23.451 66.639 13.9 16.747 35.838 26.137 63.714 26.337h.074c24.44-.163 41.521-6.457 55.407-20.417 17.684-17.784 17.18-40.18 11.39-53.636-4.157-9.665-12.123-17.467-23.048-22.823l-.251-.123zM97.297 125.913c-10.46.57-21.305-4.078-21.778-12.945-.348-6.525 4.631-13.823 23.762-14.926 2.084-.12 4.13-.18 6.138-.18 6.257 0 12.123.558 17.458 1.645-1.988 21.307-14.187 25.825-25.58 26.406z" fill="currentColor"/>
+        </symbol>
+        <symbol id="icon-bluesky" viewBox="0 0 600 530">
+            <path d="m135.72 44.03c66.496 49.921 138.02 151.14 164.28 205.46 26.262-54.316 97.782-155.54 164.28-205.46 47.98-36.021 125.72-63.892 125.72 24.795 0 17.712-10.155 148.79-16.111 170.07-20.703 73.984-96.144 92.854-163.25 81.433 117.3 19.964 147.14 86.092 82.697 152.22-122.39 125.59-175.91-31.511-189.63-71.766-2.514-7.3797-3.6904-10.832-3.7077-7.8964-0.0174-2.9357-1.1937 0.51669-3.7077 7.8964-13.714 40.255-67.233 197.36-189.63 71.766-64.444-66.128-34.605-132.26 82.697-152.22-67.108 11.421-142.55-7.4491-163.25-81.433-5.9562-21.282-16.111-152.36-16.111-170.07 0-88.687 77.742-60.816 125.72-24.795z" fill="currentColor"/>
+        </symbol>
+    </svg>
+
+    <!-- Opening Splash Montage - DISABLED
+    <div class="splash-screen" id="splash">
+        <div class="splash-montage">
+            <div class="splash-image splash-1"></div>
+            <div class="splash-image splash-2"></div>
+            <div class="splash-image splash-3"></div>
+            <div class="splash-image splash-4"></div>
+            <div class="splash-image splash-5"></div>
+        </div>
+        <div class="splash-overlay">
+            <h1 class="splash-title">MN ICE Witness</h1>
+            <p class="splash-subtitle">ICE incidents in Minnesota. Sourced.</p>
+        </div>
+        <div class="splash-skip">Tap or swipe to skip</div>
+        <div class="splash-progress"></div>
+    </div>
+    -->
+
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="masthead">
+                <h1 class="site-title"><span id="state-code">XX</span> ICE Witness
+                    <select id="state-selector" class="state-selector" aria-label="Select state">
+                        <option value="">Other States</option>
+                        <option value="https://mn-ice-witness.org">MN</option>
+                        <option value="https://co-ice-witness.pages.dev">CO</option>
+                        <option value="https://al-ice-witness.pages.dev">AL</option>
+                    </select>
+                </h1>
+                <p class="site-tagline">A Sourced Listing of ICE Incidents in <span id="state-name">State</span></p>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- View Toggle + Search -->
+        <div class="view-toggle" id="view-toggle">
+            <button class="view-btn active" data-view="list">List</button>
+            <button class="view-btn" data-view="media">Media</button>
+            <button class="search-btn" id="search-btn" aria-label="Search incidents">
+                <svg viewBox="0 0 24 24" width="18" height="18"><use href="#icon-search"/></svg>
+            </button>
+            <label class="sort-toggle" id="sort-toggle" title="Sort by recently updated">
+                <input type="checkbox" id="sort-updated-checkbox">
+                <span class="sort-label sort-label-short">New</span>
+                <span class="sort-label sort-label-full">New/Updated</span>
+            </label>
+        </div>
+
+        <!-- Search Modal -->
+        <div class="search-modal" id="search-modal" aria-hidden="true">
+            <div class="search-modal-backdrop"></div>
+            <div class="search-modal-content">
+                <input type="text" class="search-input" id="search-input" placeholder="Search incidents..." autocomplete="off" autocapitalize="off">
+                <button class="search-clear" id="search-clear" aria-label="Clear search">&times;</button>
+            </div>
+        </div>
+
+        <!-- Category Navigation -->
+        <nav class="section-nav" id="section-nav">
+            <div class="nav-inner">
+                <a href="#citizens" class="nav-pill nav-citizens"><span class="nav-label-full">Citizens / Legal Residents</span><span class="nav-label-short">Citizens</span></a>
+                <a href="#observers" class="nav-pill nav-observers">Observers</a>
+                <a href="#immigrants" class="nav-pill nav-immigrants">Immigrants</a>
+                <a href="#schools" class="nav-pill nav-schools"><span class="nav-label-full">Schools/Hospitals</span><span class="nav-label-short">Schools</span></a>
+                <a href="#response" class="nav-pill nav-response">Response</a>
+            </div>
+            <!-- Dropdown for very narrow phones -->
+            <select class="nav-dropdown" id="category-dropdown" aria-label="Jump to category">
+                <option value="">Jump to category...</option>
+                <option value="#citizens">Citizens / Legal Residents</option>
+                <option value="#observers">Observers</option>
+                <option value="#immigrants">Immigrants</option>
+                <option value="#schools">Schools/Hospitals</option>
+                <option value="#response">Response</option>
+            </select>
+        </nav>
+
+        <!-- Media Gallery View (hidden by default) -->
+        <div class="media-gallery" id="media-gallery" style="display: none;"></div>
+
+        <!-- List View (default) -->
+        <div class="list-view" id="list-view">
+
+        <!-- Flat list for "New" sort mode -->
+        <div class="flat-list" id="flat-list" style="display: none;">
+            <div class="incident-table" id="flat-list-table">
+                <div class="table-loading">Loading...</div>
+            </div>
+        </div>
+
+        <section class="incident-section" id="citizens">
+            <div class="section-header">
+                <div class="section-marker marker-citizens"></div>
+                <div class="section-text">
+                    <h2 class="section-title">U.S. Citizens / Legal Residents</h2>
+                    <p class="section-desc">U.S. Citizens / Legal Residents stopped or detained while going about their daily lives</p>
+                </div>
+            </div>
+            <div class="incident-table" data-type="citizens">
+                <div class="table-loading">Loading...</div>
+            </div>
+        </section>
+
+        <section class="incident-section" id="observers">
+            <div class="section-header">
+                <div class="section-marker marker-observers"></div>
+                <div class="section-text">
+                    <h2 class="section-title">Observers and Protesters Arrested/Attacked/Killed</h2>
+                    <p class="section-desc">People detained, attacked, or killed for legally filming, observing, or protesting ICE operations</p>
+                </div>
+            </div>
+            <div class="incident-table" data-type="observers">
+                <div class="table-loading">Loading...</div>
+            </div>
+        </section>
+
+        <section class="incident-section" id="immigrants">
+            <div class="section-header">
+                <div class="section-marker marker-immigrants"></div>
+                <div class="section-text">
+                    <h2 class="section-title">Community Members Detained</h2>
+                    <p class="section-desc">Non-criminal immigrants — business owners, workers, asylum seekers</p>
+                </div>
+            </div>
+            <div class="incident-table" data-type="immigrants">
+                <div class="table-loading">Loading...</div>
+            </div>
+        </section>
+
+        <section class="incident-section" id="schools">
+            <div class="section-header">
+                <div class="section-marker marker-schools"></div>
+                <div class="section-text">
+                    <h2 class="section-title">Schools/Hospitals</h2>
+                    <p class="section-desc">ICE/CBP actions at schools, hospitals, and healthcare institutions</p>
+                </div>
+            </div>
+            <div class="incident-table" data-type="schools-hospitals">
+                <div class="table-loading">Loading...</div>
+            </div>
+        </section>
+
+        <section class="incident-section" id="response">
+            <div class="section-header">
+                <div class="section-marker marker-response"></div>
+                <div class="section-text">
+                    <h2 class="section-title">Official Federal Response</h2>
+                    <p class="section-desc">DHS/ICE official statements justifying specific incidents and arrests</p>
+                </div>
+            </div>
+            <div class="incident-table" data-type="response">
+                <div class="table-loading">Loading...</div>
+            </div>
+        </section>
+        </div><!-- end list-view -->
+    </main>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+        <div class="lightbox-backdrop"></div>
+        <div class="lightbox-content">
+            <button class="lightbox-close" aria-label="Close">&times;</button>
+            <div class="lightbox-body" id="lightbox-body"></div>
+        </div>
+    </div>
+
+    <footer class="site-footer" id="site-footer">
+        <a href="#about" class="footer-about" id="about-link">About</a> |
+        <a href="mailto:tips@example.org" class="footer-cta" id="footer-email">Contact us with tips</a>
+    </footer>
+
+    <script src="/js/marked.min.js"></script>
+    <!-- State configuration (loads first) -->
+    <script src="/js/state-config.js"></script>
+    <!-- Core modules (no dependencies) -->
+    <script src="/js/parser.js?v=1769565504"></script>
+    <script src="/js/router.js?v=1769565504"></script>
+    <script src="/js/media-controls.js?v=1769565504"></script>
+    <!-- Feature modules -->
+    <script src="/js/view-state.js?v=1769565504"></script>
+    <script src="/js/splash.js?v=1769565504"></script>
+    <script src="/js/lightbox-content.js?v=1769565504"></script>
+    <script src="/js/lightbox.js?v=1769565504"></script>
+    <script src="/js/media-gallery.js?v=1769565504"></script>
+    <script src="/js/search.js?v=1769565504"></script>
+    <!-- Main app (last, coordinates all modules) -->
+    <script src="/js/app.js?v=1769565504"></script>
+</body>
+</html>
