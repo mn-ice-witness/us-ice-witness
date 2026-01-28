@@ -4,22 +4,44 @@ This is the **master repository** containing all shared code, schemas, and docum
 
 ## Architecture
 
-- **This repo** (`us-ice-witness`): All common code, hooks, scripts, schemas, dev-docs
-- **State repos** (AL, CO, ME, WA, etc.): Data only - incidents, media, state-specific news sources
+**One codebase, multiple subdomains:**
+
+- **This repo** (`us-ice-witness`): All site code (HTML/CSS/JS), scripts, schemas, dev-docs
+- **State repos** (AL, CO, ME): Data only - incidents, media, state-specific news sources
 - Each state repo has a symlink `us-ice-witness/` pointing here
+- State detection is via hostname (subdomain), not URL path
+
+## URL Structure
+
+| Domain | Purpose |
+|--------|---------|
+| `mn-ice-witness.org` | Minnesota (original, independent site) |
+| `co.ice-witness.org` | Colorado |
+| `al.ice-witness.org` | Alabama |
+| `me.ice-witness.org` | Maine |
+
+See `dev-docs/cloudflare-configuration.md` for full domain/DNS setup.
 
 ## Repository Structure
 
 ```
+docs/                        # Site code (HTML, CSS, JS)
+├── index.html               # Main page
+├── about.md                 # About page content
+├── css/style.css            # Styles
+├── js/                      # JavaScript modules
+│   ├── state-config.js      # Detects state from subdomain
+│   ├── router.js            # URL routing
+│   ├── app.js               # Main app controller
+│   └── ...
+└── assets/                  # Favicons, OG images
+
 dev-docs/                    # All documentation
+├── cloudflare-configuration.md  # Domain/DNS setup
 ├── adding-incidents.md      # How to add incidents
 ├── incident-schema.md       # Required fields and format
 ├── source-tiers.md          # Source credibility guidelines
-└── state-news-sources-template.md
-
-hooks/                       # Git hooks for state repos
-├── pre-commit               # Validates + auto-generates summary
-└── install-hooks.sh         # Installs hooks in state repos
+└── ...
 
 scripts/
 └── generate_summary.py      # Generates incidents-summary.json
@@ -45,18 +67,23 @@ There are exactly 5 incident types. Use ONLY these:
 4. Generate summary: `python3 us-ice-witness/scripts/generate_summary.py`
 5. Commit and push (hooks auto-validate and regenerate summary)
 
-## Scripts and Hooks
+## Deploying
 
-**Generate summary (from state repo):**
+**Deploy site code (this repo):**
 ```bash
-python3 us-ice-witness/scripts/generate_summary.py
+npx wrangler pages deploy docs --project-name=us-ice-witness --branch=main
 ```
 
-**Install git hooks (from state repo):**
+**Deploy state data (from state repo):**
 ```bash
-bash us-ice-witness/hooks/install-hooks.sh
+npx wrangler pages deploy docs --project-name=co-ice-witness --branch=main
 ```
 
-## State Data URL Pattern
+## Key Documentation
 
-Each state deploys to: `https://{state-code}-ice-witness.pages.dev`
+| File | Purpose |
+|------|---------|
+| `dev-docs/cloudflare-configuration.md` | Domain setup, DNS, redirects |
+| `dev-docs/incident-schema.md` | Required fields for incidents |
+| `dev-docs/adding-incidents.md` | Step-by-step incident workflow |
+| `dev-docs/source-tiers.md` | Source credibility guidelines |

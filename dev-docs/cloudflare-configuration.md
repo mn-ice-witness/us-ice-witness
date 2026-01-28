@@ -1,129 +1,171 @@
 # Cloudflare Configuration
 
-This documents our Cloudflare Pro setup decisions, what we enabled, what we skipped, and cost considerations.
+This documents our Cloudflare setup for the ICE Witness network of sites.
 
-## Plan Details
+## Architecture Overview
 
-- **Plan:** Cloudflare Pro ($25/month)
-- **Domain:** mn-ice-witness.org
-- **Key Benefit:** Unlimited CDN bandwidth included - no overage charges even at viral scale
+**One codebase, multiple subdomains:**
 
-## What's Enabled
+- The `us-ice-witness` Pages project contains all the HTML/CSS/JS code
+- State repos (CO, AL, ME) only contain data (incidents, media)
+- Subdomains determine which state's data to load
+- State detection is via hostname (subdomain), not URL path
 
-### Speed Optimizations (Speed → Settings)
+## Domain Structure
 
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Polish | Lossy | Compresses images aggressively |
-| WebP | ON | Serves smaller WebP to supported browsers |
-| Early Hints | ON | Preloads assets for faster page loads |
-| Speed Brain | ON | Speculative prefetch (Beta) |
-| Cloudflare Fonts | ON | Optimizes font loading |
-| HTTP/2, HTTP/3 | ON | Modern protocols |
-| TLS 1.3 | ON | Latest TLS |
-| Always use HTTPS | ON | Forces HTTPS |
+We own two domain names:
+- **mn-ice-witness.org** - Original MN-specific site (independent, established)
+- **ice-witness.org** - New domain for multi-state expansion
 
-### Smart Shield (Speed → Smart Shield)
+### URL Scheme
 
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Smart Tiered Cache | ON | Better cache hit rates |
-| Connection Reuse | ON | Reduces origin connections |
-| Health Checks | Available | Can enable for origin monitoring |
+| Domain | Purpose | Data Source |
+|--------|---------|-------------|
+| `mn-ice-witness.org` | Minnesota (original site) | GIT_MN_ICE_FILES |
+| `co.ice-witness.org` | Colorado | co-ice-witness.pages.dev |
+| `al.ice-witness.org` | Alabama | al-ice-witness.pages.dev |
+| `me.ice-witness.org` | Maine | me-ice-witness.pages.dev |
 
-### Compression
+### Redirects (configured via Cloudflare Rules)
 
-**Brotli** is enabled by default on Pro plans. The toggle was removed from the dashboard in May 2024. To customize, use **Rules → Compression Rules**.
+| Domain | Redirects To |
+|--------|--------------|
+| `ice-witness.org` | `mn-ice-witness.org` |
+| `www.ice-witness.org` | `mn-ice-witness.org` |
+| `us-ice-witness.org` | `mn-ice-witness.org` |
+| `mn.ice-witness.org` | `mn-ice-witness.org` |
 
-## What's Disabled (Intentionally)
+## How It Works
 
-| Feature | Why Disabled |
-|---------|--------------|
-| **Super Bot Fight Mode** | Causes challenge pages - adds friction for visitors |
-| **Rocket Loader** | Can break JavaScript - risky without thorough testing |
-| **WordPress APO** | Not using WordPress |
+1. User visits `co.ice-witness.org/list`
+2. Cloudflare serves files from `us-ice-witness` Pages project
+3. JavaScript detects hostname → `co`
+4. Data fetched from `co-ice-witness.pages.dev/data/incidents-summary.json`
+5. Page renders Colorado incidents
 
-## What's Not Needed
+## Cloudflare Pages Projects
 
-| Feature | Why Skipped |
-|---------|-------------|
-| Image Transformations | Paid add-on, Polish is sufficient |
-| Regional Tiered Cache | Requires upgrade |
-| Cache Reserve | Requires upgrade |
-| Argo Smart Routing | Paid add-on |
-| Prefetch URLs | Enterprise only |
+| Project | Contains | Serves |
+|---------|----------|--------|
+| `us-ice-witness` | Site code (HTML/CSS/JS) | co.ice-witness.org, al.ice-witness.org, me.ice-witness.org |
+| `co-ice-witness` | CO data only | co-ice-witness.pages.dev (data API) |
+| `al-ice-witness` | AL data only | al-ice-witness.pages.dev (data API) |
+| `me-ice-witness` | ME data only | me-ice-witness.pages.dev (data API) |
+| `mn-ice-witness-github-io` | MN full site | mn-ice-witness.org |
 
-## Deprecated Features
+## Setting Up Subdomains
 
-- **Auto Minify** - Removed by Cloudflare in August 2024
-- **Brotli toggle** - Removed May 2024 (now always on for Pro)
-- **Mirage** - May be folded into Polish or removed
+### Step 1: Add ice-witness.org to Cloudflare
+
+1. In Cloudflare Dashboard → Add a Site → `ice-witness.org`
+2. Update nameservers at your registrar to Cloudflare's
+
+### Step 2: Add Custom Domains to us-ice-witness Project
+
+In Cloudflare Dashboard:
+1. Go to Workers & Pages → `us-ice-witness`
+2. Custom domains → Add custom domain
+3. Add each: `co.ice-witness.org`, `al.ice-witness.org`, `me.ice-witness.org`
+4. Cloudflare auto-creates CNAME records pointing to `us-ice-witness.pages.dev`
+
+### Step 3: Set Up Apex/www Redirects
+
+In Cloudflare Dashboard for `ice-witness.org`:
+1. Go to Rules → Redirect Rules → Create Rule
+
+**Rule: Apex and www to MN**
+- Name: `Redirect to MN`
+- When: `(http.host eq "ice-witness.org") or (http.host eq "www.ice-witness.org")`
+- Then: Dynamic redirect
+- Expression: `concat("https://mn-ice-witness.org", http.request.uri.path)`
+- Status: 301
+
+**Rule: mn subdomain to MN**
+- Name: `mn subdomain to MN`
+- When: `http.host eq "mn.ice-witness.org"`
+- Then: Dynamic redirect
+- Expression: `concat("https://mn-ice-witness.org", http.request.uri.path)`
+- Status: 301
+
+### Step 4: Set Up us-ice-witness.org Redirects
+
+In Cloudflare Dashboard for `us-ice-witness.org`:
+1. Go to Rules → Redirect Rules → Create Rule
+2. When: `(http.host eq "us-ice-witness.org") or (http.host eq "www.us-ice-witness.org")`
+3. Then: Dynamic redirect to `concat("https://mn-ice-witness.org", http.request.uri.path)`
+4. Status: 301
+
+## DNS Records
+
+### ice-witness.org Zone
+
+| Type | Name | Content | Proxy |
+|------|------|---------|-------|
+| CNAME | co | us-ice-witness.pages.dev | Proxied |
+| CNAME | al | us-ice-witness.pages.dev | Proxied |
+| CNAME | me | us-ice-witness.pages.dev | Proxied |
+| A | @ | 192.0.2.1 | Proxied |
+| CNAME | www | ice-witness.org | Proxied |
+
+**Note:** The apex A record is a dummy IP. Redirect Rules handle the actual redirect before any server is reached.
+
+## Speed Optimizations (Pro Plan)
+
+Applied to primary domains:
+
+| Feature | Status |
+|---------|--------|
+| Polish | Lossy |
+| WebP | ON |
+| Early Hints | ON |
+| Speed Brain | ON |
+| Cloudflare Fonts | ON |
+| HTTP/2, HTTP/3 | ON |
+| TLS 1.3 | ON |
+| Always use HTTPS | ON |
+| Smart Tiered Cache | ON |
+
+### Disabled (Intentionally)
+
+| Feature | Why |
+|---------|-----|
+| Super Bot Fight Mode | Causes challenge pages |
+| Rocket Loader | Can break JavaScript |
 
 ## Security (WAF)
 
-These can be enabled without causing visitor friction:
+Enabled silently (no visitor friction):
+- Cloudflare Managed Ruleset
+- OWASP Core Ruleset
 
-| Feature | Effect |
-|---------|--------|
-| Cloudflare Managed Ruleset | Blocks attacks silently |
-| OWASP Core Ruleset | Blocks XSS, SQLi silently |
+## Deploying Changes
 
-**Avoid:** Any "Bot Fight" or "Challenge" features that show interstitial pages.
+### Deploy Code (us-ice-witness)
 
-## Cloudflare Stream (Video CDN)
+```bash
+# From GIT_US_ICE_WITNESS directory
+npx wrangler pages deploy docs --project-name=us-ice-witness --branch=main
+```
 
-### What It Is
-Separate paid service for adaptive bitrate video streaming. Automatically adjusts quality for slow connections.
+### Deploy State Data
 
-### Pricing
-- **Free with Pro:** 100 minutes storage, 10,000 minutes delivery/month
-- **$5/month add-on:** 1,000 minutes storage, 5,000 minutes delivery
-- **Overage:** $5/1,000 min storage, $1/1,000 min delivery
+```bash
+# From state repo directory (e.g., GIT_CO_ICE_WITNESS)
+npx wrangler pages deploy docs --project-name=co-ice-witness --branch=main
+```
 
-### Our Decision: NOT USING (for now)
+## Testing
 
-**Why:**
-1. **Cost risk at scale** - If site goes viral, Stream charges per minute delivered
-   - 2M visitors watching 3 min each = 6M minutes = ~$6,000/month
-2. **Current CDN is free** - Regular video files served via CDN have unlimited bandwidth with Pro
-3. **Requires re-uploading** - Would need to upload all videos to Stream and change embed codes
-
-**When to reconsider:**
-- If viewers on slow connections report buffering issues (adaptive bitrate would help)
-- If we want to offload video hosting entirely
-- For a small number of high-priority videos only (hybrid approach)
-
-### If We Use Stream Later
-
-Location: **Media → Stream** in Cloudflare dashboard (account level, not domain level)
-
-Could automate via:
-- Stream API for uploads
-- GitHub Actions to detect new videos and upload
-- Update site templates to use Stream embed codes
+After deployment:
+- `co.ice-witness.org/list` → Should show "CO ICE Witness" and Colorado incidents
+- `al.ice-witness.org/list` → Should show "AL ICE Witness" and Alabama incidents
+- `ice-witness.org` → Should redirect to mn-ice-witness.org
 
 ## Cost Summary
 
-| Scenario | Monthly Cost |
-|----------|--------------|
-| Current setup (Pro only) | $25 flat |
-| Pro + Stream starter | $25 + $5 = $30 |
-| Viral traffic (2M visitors) | $25 (CDN is unlimited) |
-| Viral + Stream | $25 + potentially $1,000s |
-
-**Bottom line:** The Pro plan's unlimited CDN bandwidth is the safest choice for cost control. Stream adds value (adaptive bitrate) but introduces variable costs.
-
-## Dashboard Navigation
-
-- **Speed optimizations:** Domain → Speed → Settings
-- **Smart Shield:** Domain → Speed → Smart Shield
-- **Caching rules:** Domain → Caching
-- **WAF/Security:** Domain → Security → WAF
-- **Stream:** Account level → Media → Stream
-- **Billing:** Account → Manage account → Billing
-
-## References
-
-- [Cloudflare Stream Pricing](https://developers.cloudflare.com/stream/pricing/)
-- [Auto Minify Deprecation](https://community.cloudflare.com/t/deprecating-auto-minify/655677)
-- [Brotli Settings Removal](https://community.cloudflare.com/t/auto-minify-and-brotli-settings-missing-from-dashboard/788599)
+| Component | Cost |
+|-----------|------|
+| Cloudflare Pro (mn-ice-witness.org) | $25/month |
+| Cloudflare Pro (ice-witness.org) | $25/month |
+| Pages projects (all) | Free |
+| **Total** | ~$50/month |
