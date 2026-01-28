@@ -331,8 +331,9 @@ def update_media_order(incidents_with_media, data_dir):
 
 
 def main():
-    script_dir = Path(__file__).parent
-    project_root = script_dir.parent
+    # Use current working directory as project root (allows running from state repos)
+    # The pre-commit hook cd's to repo root before calling this script
+    project_root = Path.cwd()
     docs_dir = project_root / "docs"
     incidents_dir = docs_dir / "incidents"
     media_dir = docs_dir / "media"
