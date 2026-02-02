@@ -24,12 +24,12 @@ See [adding-incidents.md](adding-incidents.md#language-guidelines) for complete 
 ## File Naming
 
 ```
-docs/incidents/YYYY-MM/YYYY-MM-DD-slug.md
+docs/incidents/YYYY-MM/DD/YYYY-MM-DD-slug.md
 ```
 
 Examples:
-- `docs/incidents/2026-01/2026-01-07-renee-good-shooting.md`
-- `docs/incidents/2025-12/2025-12-10-mubashir-lunch-break.md`
+- `docs/incidents/2026-01/07/2026-01-07-renee-good-shooting.md`
+- `docs/incidents/2025-12/10/2025-12-10-mubashir-lunch-break.md`
 
 **IMPORTANT:** All incident files MUST be in `docs/incidents/`. The website serves directly from `docs/`.
 

@@ -157,7 +157,7 @@ Tell the AI: "Add this incident: [paste news URL]"
 ### Manual Method
 
 1. Read the schema: `dev-docs/incident-schema.md`
-2. Create file: `docs/incidents/YYYY-MM/YYYY-MM-DD-slug/index.md`
+2. Create file: `docs/incidents/YYYY-MM/DD/YYYY-MM-DD-slug.md`
 3. Get timestamp: `date +"%Y-%m-%dT%H:%M:%S"` (NEVER make up timestamps)
 4. Generate summary: `./us-ice-witness/bin/run generate_summary.py`
 5. Commit and push

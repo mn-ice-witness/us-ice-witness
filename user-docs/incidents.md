@@ -5,10 +5,10 @@
 ### 1. Create the File
 
 ```
-docs/incidents/YYYY-MM/YYYY-MM-DD-slug/index.md
+docs/incidents/YYYY-MM/DD/YYYY-MM-DD-slug.md
 ```
 
-Example: `docs/incidents/2026-01/2026-01-15-aurora-arrest/index.md`
+Example: `docs/incidents/2026-01/15/2026-01-15-aurora-arrest.md`
 
 ### 2. Use This Template
 
@@ -116,8 +116,8 @@ The pre-commit hook validates and regenerates `incidents-summary.json`.
 Prefix filename with underscore to temporarily hide:
 
 ```bash
-mv docs/incidents/2026-01/2026-01-15-aurora-arrest/index.md \
-   docs/incidents/2026-01/2026-01-15-aurora-arrest/_index.md
+mv docs/incidents/2026-01/15/2026-01-15-aurora-arrest.md \
+   docs/incidents/2026-01/15/_2026-01-15-aurora-arrest.md
 git add .
 git commit -m "Hide aurora-arrest"
 ```
@@ -131,7 +131,7 @@ The pre-commit hook detects renames and regenerates the summary.
 ## Deleting
 
 ```bash
-rm docs/incidents/2026-01/2026-01-15-aurora-arrest/index.md
+rm docs/incidents/2026-01/15/2026-01-15-aurora-arrest.md
 git add .
 git commit -m "Remove aurora-arrest"
 ```

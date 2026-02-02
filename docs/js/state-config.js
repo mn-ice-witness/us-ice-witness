@@ -123,13 +123,13 @@ const StateConfig = {
      * Get incident markdown URL
      */
     getIncidentUrl(slug) {
-        // Incidents are stored by month folder
+        // Incidents are stored by month/day folder matching media structure
         // slug format: 2026-01-15-incident-name
-        const match = slug.match(/^(\d{4}-\d{2})/);
+        const match = slug.match(/^(\d{4}-\d{2})-(\d{2})/);
         if (match) {
-            return `${this.getDataUrl()}/incidents/${match[1]}/${slug}/index.md`;
+            return `${this.getDataUrl()}/incidents/${match[1]}/${match[2]}/${slug}.md`;
         }
-        return `${this.getDataUrl()}/incidents/${slug}/index.md`;
+        return `${this.getDataUrl()}/incidents/${slug}.md`;
     },
 
     /**

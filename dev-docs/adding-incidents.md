@@ -270,7 +270,7 @@ These are common mistakes when adding incidents. Read this section carefully.
 1. Determine the date of the incident
 2. Create file in correct folder:
    ```
-   docs/incidents/2026-01/2026-01-15-description-slug.md
+   docs/incidents/2026-01/15/2026-01-15-description-slug.md
    ```
 3. Use lowercase, hyphens, no spaces in filename
 
@@ -396,7 +396,7 @@ Verify:
 ## Step 6: Commit
 
 ```bash
-git add docs/incidents/2026-01/2026-01-15-new-incident.md
+git add docs/incidents/2026-01/15/2026-01-15-new-incident.md
 git add docs/data/incidents-summary.json
 git commit -m "Add incident: Title of incident"
 git push

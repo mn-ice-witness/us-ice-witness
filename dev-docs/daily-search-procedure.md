@@ -211,7 +211,7 @@ This catches coverage from smaller outlets, syndicated stories, and social media
 
 For each potential incident found:
 
-1. **Check by date** - Do we have `docs/incidents/YYYY-MM/YYYY-MM-DD-*.md` for that date?
+1. **Check by date** - Do we have `docs/incidents/YYYY-MM/DD/YYYY-MM-DD-*.md` for that date?
 2. **Check by affected individual's name** - Grep for names in existing files
 3. **Check by location** - Search for the street, business, or neighborhood
 4. **Check not_use.md** - Is this story already evaluated and rejected?

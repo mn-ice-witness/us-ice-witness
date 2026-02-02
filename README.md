@@ -33,9 +33,11 @@ docs/
 │   └── incidents-summary.json
 ├── incidents/
 │   └── YYYY-MM/
-│       └── incident-slug/
-│           └── index.md
+│       └── DD/
+│           └── YYYY-MM-DD-slug.md
 └── media/
-    └── (images, videos)
+    └── YYYY-MM/
+        └── DD/
+            └── YYYY-MM-DD-slug.mp4
 ```
 

@@ -53,6 +53,6 @@ At the end of the Summary text, add:
 ## Related Incidents
 
 Examples of incidents on this site that fit this pattern:
-- [Silva Sosa parents detained 5 days after I-130 approval](../docs/incidents/2026-01/2026-01-12-silva-sosa-inver-grove-heights.md)
-- [Willmar high school student with legal refugee status arrested](../docs/incidents/2026-01/2026-01-13-willmar-student-arrested.md)
-- [Moldovan refugee Nadya detained while driving to church](../docs/incidents/2026-01/2026-01-17-nadya-moldovan-refugee.md)
+- [Silva Sosa parents detained 5 days after I-130 approval](../docs/incidents/2026-01/12/2026-01-12-silva-sosa-inver-grove-heights.md)
+- [Willmar high school student with legal refugee status arrested](../docs/incidents/2026-01/13/2026-01-13-willmar-student-arrested.md)
+- [Moldovan refugee Nadya detained while driving to church](../docs/incidents/2026-01/17/2026-01-17-nadya-moldovan-refugee.md)

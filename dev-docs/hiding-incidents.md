@@ -8,10 +8,10 @@ To hide an incident, prefix its filename with an underscore (`_`):
 
 ```bash
 # Hide an incident
-mv docs/incidents/2026-01/2026-01-24-my-incident.md docs/incidents/2026-01/_2026-01-24-my-incident.md
+mv docs/incidents/2026-01/24/2026-01-24-my-incident.md docs/incidents/2026-01/24/_2026-01-24-my-incident.md
 
 # Unhide it later
-mv docs/incidents/2026-01/_2026-01-24-my-incident.md docs/incidents/2026-01/2026-01-24-my-incident.md
+mv docs/incidents/2026-01/24/_2026-01-24-my-incident.md docs/incidents/2026-01/24/2026-01-24-my-incident.md
 ```
 
 Then regenerate the summary:

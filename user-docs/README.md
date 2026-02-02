@@ -14,7 +14,7 @@ ICE Witness documents ICE enforcement actions across U.S. states. Each state has
 
 | File | Location | Purpose |
 |------|----------|---------|
-| Incident files | `docs/incidents/YYYY-MM/slug/index.md` | Source of truth for incidents |
+| Incident files | `docs/incidents/YYYY-MM/DD/YYYY-MM-DD-slug.md` | Source of truth for incidents |
 | Raw media | `raw_media/` | Unprocessed videos/images |
 | State config | `ice-witness.config` | State code, name, contact |
 | About page | `docs/about.md` | Your state's about page |
