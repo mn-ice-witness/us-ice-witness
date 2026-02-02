@@ -191,15 +191,20 @@ Tell the AI: "Process the media in raw_media"
 
 ## Deploying
 
-**Deploy site code (this repo):**
-```bash
-npx wrangler pages deploy docs --project-name=us-ice-witness --branch=main
-```
+**Normal workflow: Just push to `main` and the site updates automatically.**
 
-**Deploy state data (from state repo):**
+Cloudflare Pages is connected to GitHub and auto-deploys on every push to `main`. No manual intervention is needed.
+
+**Manual deploy (rarely needed—only for initial setup or recovery):**
 ```bash
+# This repo (shared code)
+npx wrangler pages deploy docs --project-name=us-ice-witness --branch=main
+
+# State repo (state-specific data)
 npx wrangler pages deploy docs --project-name=co-ice-witness --branch=main
 ```
+
+If the site seems stuck, push again or check Cloudflare Pages dashboard—don't jump to manual wrangler commands.
 
 ---
 

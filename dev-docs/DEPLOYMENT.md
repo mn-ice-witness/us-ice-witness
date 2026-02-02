@@ -1,19 +1,25 @@
 # Deployment Architecture
 
-This document explains how the MN ICE Witness site is deployed and served.
+This document explains how the ICE Witness sites are deployed and served.
+
+## IMPORTANT: Deployment is Automatic
+
+**The normal deployment workflow is simply: push to `main` branch.**
+
+There is no need to manually trigger rebuilds, run wrangler commands, or use the Cloudflare dashboard for routine deployments. When you push to `main`, Cloudflare Pages automatically detects the change and deploys within seconds.
 
 ## Overview
 
 The site uses a modern JAMstack architecture:
 
 ```
-Git Push → GitHub (repo) → Cloudflare Pages (build & CDN) → Users
+Git Push → GitHub (repo) → Cloudflare Pages (auto-deploy) → Users
 ```
 
 - **Source Code**: GitHub repository
-- **Hosting**: Cloudflare Pages
+- **Hosting**: Cloudflare Pages (automatic deployment on push)
 - **DNS**: Cloudflare (nameservers pointed from Porkbun)
-- **Domain Registrar**: Porkbun (owns mn-ice-witness.org)
+- **Domain Registrar**: Porkbun (owns ice-witness.org)
 - **SSL**: Automatic via Cloudflare
 
 ## Architecture Diagram
@@ -33,12 +39,30 @@ Git Push → GitHub (repo) → Cloudflare Pages (build & CDN) → Users
 
 ## Deployment Flow
 
-### Automatic Deployment
+### Automatic Deployment (Normal Workflow)
+
+**Just push to `main` and the site updates automatically.**
 
 1. Developer pushes to `main` branch on GitHub
 2. Cloudflare Pages detects the push via GitHub integration
 3. Cloudflare pulls the code and deploys from `docs/` directory
 4. Site is live globally within seconds
+
+No manual intervention is needed. Do not use wrangler commands for routine deployments.
+
+### Manual Deployment (Rare/Special Cases Only)
+
+Manual wrangler deploys should only be used when:
+- Setting up a new state site for the first time
+- Recovering from a failed automatic deployment
+- Testing a specific deploy configuration
+
+```bash
+# Manual deploy (rarely needed)
+npx wrangler pages deploy docs --project-name=<project-name> --branch=main
+```
+
+**If something seems "stuck", push again or check the Cloudflare Pages dashboard for deployment status—don't jump to manual wrangler commands.**
 
 ### No Build Step Required
 
