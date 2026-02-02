@@ -1,0 +1,21 @@
+{
+  "name": "MN ICE Witness",
+  "short_name": "MN ICE Witness",
+  "description": "Sourced database of ICE and CBP civil rights incidents in Minnesota",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f7f5",
+  "theme_color": "#121212",
+  "icons": [
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

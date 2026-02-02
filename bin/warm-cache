@@ -1,0 +1,161 @@
+#!/usr/bin/env bash
+#
+# Warm Cloudflare cache by requesting all media files
+#
+# Usage:
+#   ./bin/warm-cache              # Run once
+#   ./bin/warm-cache --loop       # Run continuously every 10 minutes
+#   ./bin/warm-cache --loop 5     # Run continuously every 5 minutes
+#
+# Note: Running multiple times from the same location only warms that edge.
+# Cloudflare caches per PoP (Point of Presence), so different geographic
+# locations will cache independently on first request.
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+SUMMARY_FILE="$PROJECT_ROOT/docs/data/incidents-summary.json"
+BASE_URL="https://mn-ice-witness.org"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Parse arguments
+LOOP_MODE=false
+INTERVAL_MINUTES=10
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --loop)
+            LOOP_MODE=true
+            if [[ $# -gt 1 ]] && [[ $2 =~ ^[0-9]+$ ]]; then
+                INTERVAL_MINUTES=$2
+                shift
+            fi
+            shift
+            ;;
+        --url)
+            BASE_URL="$2"
+            shift 2
+            ;;
+        -h|--help)
+            echo "Usage: $0 [--loop [minutes]] [--url BASE_URL]"
+            echo ""
+            echo "Options:"
+            echo "  --loop [N]    Run continuously every N minutes (default: 10)"
+            echo "  --url URL     Override base URL (default: $BASE_URL)"
+            echo "  -h, --help    Show this help"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+    esac
+done
+
+# Check dependencies
+if ! command -v jq &> /dev/null; then
+    echo -e "${RED}Error: jq is required but not installed.${NC}"
+    echo "Install with: brew install jq"
+    exit 1
+fi
+
+if ! command -v curl &> /dev/null; then
+    echo -e "${RED}Error: curl is required but not installed.${NC}"
+    exit 1
+fi
+
+warm_cache() {
+    local round=$1
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+
+    echo ""
+    echo -e "${BLUE}═══════════════════════════════════════════════════════════════${NC}"
+    echo -e "${BLUE}  Cache Warming Round #$round - $timestamp${NC}"
+    echo -e "${BLUE}═══════════════════════════════════════════════════════════════${NC}"
+    echo ""
+
+    # Extract all media paths from incidents-summary.json
+    local media_paths=$(jq -r '
+        .incidents[] |
+        select(.hasLocalMedia == true) |
+        .localMediaFiles[]?.path // empty,
+        .localMediaOgPath // empty
+    ' "$SUMMARY_FILE" | sort -u | grep -v '^$')
+
+    local total=$(echo "$media_paths" | wc -l | tr -d ' ')
+    local count=0
+    local success=0
+    local cached=0
+    local failed=0
+
+    echo -e "Warming ${YELLOW}$total${NC} media files from ${BLUE}$BASE_URL${NC}"
+    echo ""
+
+    while IFS= read -r path; do
+        ((count++))
+        local url="$BASE_URL/$path"
+        local filename=$(basename "$path")
+
+        # Use HEAD request to warm cache without downloading full file
+        local response=$(curl -s -o /dev/null -w "%{http_code} %{size_download}" -I "$url" 2>/dev/null || echo "000 0")
+        local http_code=$(echo "$response" | cut -d' ' -f1)
+
+        # Check CF-Cache-Status header
+        local cache_status=$(curl -s -I "$url" 2>/dev/null | grep -i "cf-cache-status" | cut -d: -f2 | tr -d ' \r\n' || echo "UNKNOWN")
+
+        if [[ "$http_code" == "200" ]]; then
+            ((success++))
+            if [[ "$cache_status" == "HIT" ]]; then
+                ((cached++))
+                printf "  [%3d/%3d] ${GREEN}✓${NC} %-50s ${GREEN}HIT${NC}\n" "$count" "$total" "$filename"
+            else
+                printf "  [%3d/%3d] ${GREEN}✓${NC} %-50s ${YELLOW}%s${NC}\n" "$count" "$total" "$filename" "$cache_status"
+            fi
+        else
+            ((failed++))
+            printf "  [%3d/%3d] ${RED}✗${NC} %-50s ${RED}HTTP %s${NC}\n" "$count" "$total" "$filename" "$http_code"
+        fi
+    done <<< "$media_paths"
+
+    echo ""
+    echo -e "${BLUE}───────────────────────────────────────────────────────────────${NC}"
+    echo -e "  Results: ${GREEN}$success success${NC}, ${GREEN}$cached cached (HIT)${NC}, ${RED}$failed failed${NC}"
+    echo -e "${BLUE}───────────────────────────────────────────────────────────────${NC}"
+}
+
+# Main execution
+echo -e "${BLUE}"
+echo "  ╔═══════════════════════════════════════════════════════════╗"
+echo "  ║           Cloudflare Cache Warmer                         ║"
+echo "  ╚═══════════════════════════════════════════════════════════╝"
+echo -e "${NC}"
+echo "  Base URL: $BASE_URL"
+if $LOOP_MODE; then
+    echo "  Mode: Continuous (every $INTERVAL_MINUTES minutes)"
+    echo "  Press Ctrl+C to stop"
+else
+    echo "  Mode: Single run"
+fi
+
+round=1
+
+if $LOOP_MODE; then
+    while true; do
+        warm_cache $round
+        ((round++))
+        echo ""
+        echo -e "${YELLOW}Sleeping for $INTERVAL_MINUTES minutes... (Ctrl+C to stop)${NC}"
+        sleep $((INTERVAL_MINUTES * 60))
+    done
+else
+    warm_cache $round
+    echo ""
+    echo -e "${GREEN}Done!${NC} Run with ${YELLOW}--loop${NC} for continuous warming."
+fi

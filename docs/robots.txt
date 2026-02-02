@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mn-ice-witness.org/sitemap.xml

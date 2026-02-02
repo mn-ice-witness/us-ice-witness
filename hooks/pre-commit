@@ -1,0 +1,123 @@
+#!/bin/bash
+# Pre-commit hook for state data repositories
+# This hook runs from the state repo and calls scripts from the us-ice-witness symlink
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+US_ICE_WITNESS="$REPO_ROOT/us-ice-witness"
+US_BIN="$US_ICE_WITNESS/bin"
+DOCS_URL="https://docs.ice-witness.org"
+
+# Color output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+error_exit() {
+    echo -e "${RED}ERROR:${NC} $1"
+    echo ""
+    echo "See ${DOCS_URL}/setup for setup instructions."
+    exit 1
+}
+
+warn() {
+    echo -e "${YELLOW}WARNING:${NC} $1"
+}
+
+success() {
+    echo -e "${GREEN}✓${NC} $1"
+}
+
+# Step 1: Check us-ice-witness symlink
+if [ ! -d "$US_ICE_WITNESS" ]; then
+    error_exit "us-ice-witness symlink not found.
+
+Create the symlink in your state repo:
+  ln -s ../GIT_US_ICE_WITNESS us-ice-witness"
+fi
+
+if [ ! -d "$US_BIN" ]; then
+    error_exit "us-ice-witness/bin not found.
+
+The us-ice-witness symlink may be pointing to the wrong location.
+It should point to the GIT_US_ICE_WITNESS repository."
+fi
+
+# Step 2: Check for user config
+USER_CONFIG="$HOME/.ice-witness.config"
+if [ ! -f "$USER_CONFIG" ]; then
+    error_exit "User config not found: $USER_CONFIG
+
+Create ~/.ice-witness.config with your Python path:
+  python_exe: /path/to/your/python3"
+fi
+
+# Step 3: Check for project config
+PROJECT_CONFIG="$REPO_ROOT/ice-witness.config"
+if [ ! -f "$PROJECT_CONFIG" ]; then
+    error_exit "Project config not found: $PROJECT_CONFIG
+
+Create ice-witness.config in your state repo:
+  state_code: CO
+  state_name: Colorado
+  contact_email: tips@ice-witness.org"
+fi
+
+# Step 4: Get Python path from config
+PYTHON_EXE=$(grep -E "^python_exe:" "$USER_CONFIG" | sed 's/python_exe:[[:space:]]*//' | tr -d '"' | tr -d "'")
+if [ -z "$PYTHON_EXE" ]; then
+    error_exit "python_exe not set in $USER_CONFIG
+
+Add this line to your config:
+  python_exe: /path/to/your/python3"
+fi
+
+# Expand ~ in path
+PYTHON_EXE="${PYTHON_EXE/#\~/$HOME}"
+
+# Resolve command name to full path if needed
+if [[ "$PYTHON_EXE" != /* ]]; then
+    RESOLVED=$(command -v "$PYTHON_EXE" 2>/dev/null || true)
+    if [ -n "$RESOLVED" ]; then
+        PYTHON_EXE="$RESOLVED"
+    fi
+fi
+
+if [ ! -x "$PYTHON_EXE" ]; then
+    error_exit "Python executable not found or not executable: $PYTHON_EXE
+
+Update python_exe in $USER_CONFIG to a valid Python 3 path.
+Find your Python with: which python3"
+fi
+
+# Step 5: Verify Python version
+PYTHON_VERSION=$("$PYTHON_EXE" --version 2>&1 | grep -oE '[0-9]+\.[0-9]+')
+MAJOR=$(echo "$PYTHON_VERSION" | cut -d. -f1)
+if [ "$MAJOR" -lt 3 ]; then
+    error_exit "Python 3 required, found Python $PYTHON_VERSION
+
+Update python_exe in $USER_CONFIG to a Python 3 path."
+fi
+
+# Always regenerate incidents-summary.json on every commit
+# This ensures deletions, renames, and all changes are captured
+echo "Regenerating incidents-summary.json..."
+
+cd "$REPO_ROOT"
+if ! "$PYTHON_EXE" "$US_BIN/generate_summary.py" > /dev/null 2>&1; then
+    echo -e "${RED}❌ Incident validation failed.${NC}"
+    echo ""
+    echo "Run the following to see errors:"
+    echo "  $PYTHON_EXE us-ice-witness/bin/generate_summary.py"
+    exit 1
+fi
+
+success "Incident validation passed"
+
+# Add the updated summary to the commit
+if [ -f "$REPO_ROOT/docs/data/incidents-summary.json" ]; then
+    git add "$REPO_ROOT/docs/data/incidents-summary.json"
+    success "Updated incidents-summary.json"
+fi

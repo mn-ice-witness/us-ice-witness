@@ -1,0 +1,72 @@
+#!/bin/bash
+# Run a Python script using the Python from ~/.ice-witness.config
+#
+# Usage: ./us-ice-witness/bin/run <script.py> [args...]
+# Example: ./us-ice-witness/bin/run generate_summary.py
+#          ./us-ice-witness/bin/run process_media.py --force
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+USER_CONFIG="$HOME/.ice-witness.config"
+
+# Colors
+RED='\033[0;31m'
+NC='\033[0m'
+
+error() {
+    echo -e "${RED}ERROR:${NC} $1" >&2
+    exit 1
+}
+
+# Check for user config
+if [ ! -f "$USER_CONFIG" ]; then
+    error "Config file not found: $USER_CONFIG
+
+Create it with your Python path:
+  echo 'python_exe: /path/to/python' > ~/.ice-witness.config
+
+See https://docs.ice-witness.org/setup for setup instructions."
+fi
+
+# Extract python_exe from config
+PYTHON_EXE=$(grep -E "^python_exe:" "$USER_CONFIG" 2>/dev/null | sed 's/python_exe:[[:space:]]*//' | tr -d '"' | tr -d "'")
+
+if [ -z "$PYTHON_EXE" ]; then
+    error "python_exe not found in $USER_CONFIG
+
+Add a line like:
+  python_exe: /path/to/python"
+fi
+
+# Check Python exists
+if ! command -v "$PYTHON_EXE" &> /dev/null; then
+    error "Python executable not found: $PYTHON_EXE
+
+Update python_exe in $USER_CONFIG to a valid Python path."
+fi
+
+# Get the script to run
+if [ $# -lt 1 ]; then
+    echo "Usage: $0 <script.py> [args...]"
+    echo ""
+    echo "Available scripts:"
+    ls -1 "$SCRIPT_DIR"/*.py 2>/dev/null | xargs -n1 basename | sed 's/^/  /'
+    exit 1
+fi
+
+SCRIPT="$1"
+shift
+
+# If script doesn't have a path, look in bin/
+if [[ "$SCRIPT" != */* ]]; then
+    SCRIPT="$SCRIPT_DIR/$SCRIPT"
+fi
+
+# Check script exists
+if [ ! -f "$SCRIPT" ]; then
+    error "Script not found: $SCRIPT"
+fi
+
+# Run it
+exec "$PYTHON_EXE" "$SCRIPT" "$@"
