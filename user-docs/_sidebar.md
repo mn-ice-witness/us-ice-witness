@@ -2,4 +2,3 @@
 - [Setup](setup.md)
 - [Incidents](incidents.md)
 - [Media](media.md)
-- [Editorial](editorial.md)

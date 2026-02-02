@@ -12,6 +12,43 @@ Install ffmpeg for media processing:
 
 ---
 
+## Audio Capture (macOS)
+
+macOS screen recording does not capture system audio by default. Install BlackHole to route audio.
+
+### Setup
+
+```bash
+brew install blackhole-2ch
+```
+
+Reboot after installing.
+
+### Create Multi-Output Device
+
+So you can hear audio while recording:
+
+1. Open **Audio MIDI Setup** (Cmd+Space, search for it)
+2. Click **+** → **Create Multi-Output Device**
+3. Check both **BlackHole 2ch** and your speakers
+4. Right-click → "Use This Device For Sound Output"
+
+### Recording with Audio
+
+1. Cmd+Shift+5 → Options
+2. Under Microphone, select **BlackHole 2ch**
+3. Record
+
+### Verify Audio Was Captured
+
+```bash
+ffprobe -v error -show_entries stream=codec_type -of default=noprint_wrappers=1 your-video.mov
+```
+
+Should show both `codec_type=video` and `codec_type=audio`.
+
+---
+
 ## Workflow
 
 1. **Capture** - Record video or screenshot

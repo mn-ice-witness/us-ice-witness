@@ -37,8 +37,7 @@ The website reads from generated files. You only edit source files.
 |-------|-------------|
 | [Setup](setup.md) | Python, configs, hooks |
 | [Incidents](incidents.md) | Add, edit, hide, remove incidents |
-| [Media](media.md) | Process videos and images |
-| [Editorial](editorial.md) | Source guidelines |
+| [Media](media.md) | Capture and process videos/images |
 
 ---
 
