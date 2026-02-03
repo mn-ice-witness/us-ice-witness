@@ -51,7 +51,7 @@ ls -la ../GIT_US_ICE_WITNESS
 
 If not found, clone it:
 ```bash
-git clone https://github.com/mn-ice-witness/us-ice-witness-repo.git ../GIT_US_ICE_WITNESS
+git clone https://github.com/mn-ice-witness/us-ice-witness.git ../GIT_US_ICE_WITNESS
 ```
 
 Then create the symlink:
@@ -62,7 +62,7 @@ ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo
 ### If user chooses Option B (direct clone):
 
 ```bash
-git clone https://github.com/mn-ice-witness/us-ice-witness-repo.git us-ice-witness-repo
+git clone https://github.com/mn-ice-witness/us-ice-witness.git us-ice-witness-repo
 ```
 
 ### Verify it worked:

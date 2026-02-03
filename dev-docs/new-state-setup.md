@@ -24,7 +24,7 @@ The state repos only contain **data** (incidents, media). The shared codebase is
 gh repo create mn-ice-witness/{state}-ice-witness --public
 
 # Clone locally
-cd ~/workspace/us-ice-witness-repo
+cd ~/workspace/us-ice-witness
 git clone https://github.com/mn-ice-witness/{state}-ice-witness.git GIT_{STATE}_ICE_WITNESS
 cd GIT_{STATE}_ICE_WITNESS
 ```

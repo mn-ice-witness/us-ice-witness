@@ -3,8 +3,8 @@
 ## 1. Clone Your State Repository
 
 ```bash
-mkdir -p ~/workspace/us-ice-witness-repo
-cd ~/workspace/us-ice-witness-repo
+mkdir -p ~/workspace/us-ice-witness
+cd ~/workspace/us-ice-witness
 git clone https://github.com/mn-ice-witness/co-ice-witness.git GIT_CO_ICE_WITNESS
 cd GIT_CO_ICE_WITNESS
 ```
@@ -16,8 +16,8 @@ The shared `us-ice-witness-repo` codebase must be accessible as `us-ice-witness-
 **Option A: Clone nearby + symlink** (recommended for multiple state repos)
 
 ```bash
-cd ~/workspace/us-ice-witness-repo
-git clone https://github.com/mn-ice-witness/us-ice-witness-repo.git GIT_US_ICE_WITNESS
+cd ~/workspace/us-ice-witness
+git clone https://github.com/mn-ice-witness/us-ice-witness.git GIT_US_ICE_WITNESS
 
 cd GIT_CO_ICE_WITNESS
 ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo
@@ -27,7 +27,7 @@ ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo
 
 ```bash
 cd GIT_CO_ICE_WITNESS
-git clone https://github.com/mn-ice-witness/us-ice-witness-repo.git us-ice-witness-repo
+git clone https://github.com/mn-ice-witness/us-ice-witness.git us-ice-witness-repo
 ```
 
 Either approach works. The `.gitignore` excludes `us-ice-witness-repo/`.
@@ -108,7 +108,7 @@ If it runs without errors, you're ready.
 ## Final Structure
 
 ```
-~/workspace/us-ice-witness-repo/
+~/workspace/us-ice-witness/
 ├── GIT_US_ICE_WITNESS/           # Shared code
 │   ├── bin/                      # Scripts
 │   ├── hooks/                    # Git hooks
@@ -132,7 +132,7 @@ If it runs without errors, you're ready.
 Pull shared code updates periodically:
 
 ```bash
-cd ~/workspace/us-ice-witness-repo/GIT_US_ICE_WITNESS
+cd ~/workspace/us-ice-witness/GIT_US_ICE_WITNESS
 git pull
 ```
 
