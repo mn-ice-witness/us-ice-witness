@@ -195,6 +195,11 @@ Tell the AI: "Process the media in raw_media"
 
 Cloudflare Pages is connected to GitHub and auto-deploys on every push to `main`. No manual intervention is needed.
 
+**IMPORTANT FOR AI ASSISTANTS: Always confirm with the user before:**
+- Running any `wrangler` commands
+- Pushing commits that trigger Cloudflare deployments
+- Making any changes that affect the live site
+
 **Manual deploy (rarely needed—only for initial setup or recovery):**
 ```bash
 # This repo (shared code)
