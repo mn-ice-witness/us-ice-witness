@@ -517,9 +517,7 @@ const App = {
         const date = new Date(isoTimestamp.includes('T') ? isoTimestamp : isoTimestamp + 'T12:00:00');
         if (isNaN(date.getTime())) return null;
 
-        const month = date.toLocaleDateString('en-US', { month: 'short' });
-        const day = date.getDate();
-        return `${month} ${day}`;
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     },
 
     /**
@@ -558,7 +556,7 @@ const App = {
         ` : '';
 
         const incidentDate = new Date(incident.date + 'T12:00:00');
-        const incidentDateStr = incidentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const incidentDateStr = incidentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
         const timestampLabel = this.getTimestampLabel(incident);
         const metaLine = timestampLabel ? `Occurred ${incidentDateStr}&nbsp;&nbsp;&nbsp;&nbsp;<span class="row-added">|&nbsp;&nbsp;&nbsp;&nbsp;${timestampLabel}</span>` : `Occurred ${incidentDateStr}`;

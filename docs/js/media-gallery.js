@@ -239,7 +239,7 @@ const MediaGallery = {
 
         // Format incident date (when it occurred)
         const incidentDate = new Date(incident.date + 'T12:00:00');
-        const incidentDateStr = incidentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const incidentDateStr = incidentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
         const timestampLabel = App.getTimestampLabel(incident);
         const metaLine = timestampLabel ? `Occurred ${incidentDateStr}&nbsp;&nbsp;&nbsp;&nbsp;<span class="media-card-added">|&nbsp;&nbsp;&nbsp;&nbsp;${timestampLabel}</span>` : `Occurred ${incidentDateStr}`;

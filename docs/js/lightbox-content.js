@@ -123,12 +123,13 @@ const LightboxContent = {
 
         const month = date.toLocaleDateString('en-US', { month: 'short' });
         const day = date.getDate();
+        const year = date.getFullYear();
         let hours = date.getHours();
         const minutes = date.getMinutes().toString().padStart(2, '0');
         const ampm = hours >= 12 ? 'pm' : 'am';
         hours = hours % 12 || 12;
 
-        return `${month} ${day}, ${hours}:${minutes}${ampm}`;
+        return `${month} ${day}, ${year}, ${hours}:${minutes}${ampm}`;
     },
 
     /**
@@ -153,9 +154,7 @@ const LightboxContent = {
                 updateLabel = 'Updated: ' + this.formatTimestampForPage(lastUpdated);
             } else {
                 const date = new Date(lastUpdated + 'T12:00:00');
-                const month = date.toLocaleDateString('en-US', { month: 'short' });
-                const day = date.getDate();
-                updateLabel = `Updated: ${month} ${day}`;
+                updateLabel = 'Updated: ' + date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
             }
         }
 
