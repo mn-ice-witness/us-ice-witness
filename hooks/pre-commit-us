@@ -1,0 +1,26 @@
+#!/bin/bash
+# Pre-commit hook for the us-ice-witness repository (shared code)
+# This hook updates cache-busting version strings when JS/CSS changes
+
+set -e
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+INDEX="$REPO_ROOT/docs/index.html"
+
+# Check if any JS or CSS files are staged
+STAGED_FILES=$(git diff --cached --name-only)
+JS_CSS_CHANGED=$(echo "$STAGED_FILES" | grep -E '\.(js|css)$' || true)
+
+if [ -n "$JS_CSS_CHANGED" ] && [ -f "$INDEX" ]; then
+    TIMESTAMP=$(date +%s)
+    echo "Cache busting index.html (v=$TIMESTAMP)..."
+
+    # Update version strings
+    sed -i '' "s/?v=[0-9]*/?v=$TIMESTAMP/g" "$INDEX"
+
+    # Stage the updated index.html
+    git add "$INDEX"
+    echo "✓ Updated version strings in index.html"
+fi
+
+exit 0
