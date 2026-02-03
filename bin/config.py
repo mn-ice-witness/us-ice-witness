@@ -204,26 +204,26 @@ def validate_external_tools():
 
 def check_us_ice_witness_repo(project_root):
     """
-    Validate that the us-ice-witness symlink exists and points to valid repo.
+    Validate that the us-ice-witness-repo symlink exists and points to valid repo.
 
-    Returns path to us-ice-witness directory or exits with error.
+    Returns path to us-ice-witness-repo directory or exits with error.
     """
-    us_ice_witness = Path(project_root) / "us-ice-witness"
+    us_ice_witness = Path(project_root) / "us-ice-witness-repo"
 
     if not us_ice_witness.exists():
-        print("ERROR: us-ice-witness symlink not found")
+        print("ERROR: us-ice-witness-repo symlink not found")
         print()
         print("Create the symlink in your state repo:")
-        print("  ln -s ../GIT_US_ICE_WITNESS us-ice-witness")
+        print("  ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo")
         print()
         print(f"See {DOCS_URL}/setup for setup instructions.")
         sys.exit(1)
 
     bin_dir = us_ice_witness / "bin"
     if not bin_dir.exists():
-        print("ERROR: us-ice-witness/bin not found")
+        print("ERROR: us-ice-witness-repo/bin not found")
         print()
-        print("The us-ice-witness symlink may be pointing to the wrong location.")
+        print("The us-ice-witness-repo symlink may be pointing to the wrong location.")
         print("It should point to the GIT_US_ICE_WITNESS repository.")
         print()
         print(f"See {DOCS_URL}/setup for setup instructions.")
@@ -240,7 +240,7 @@ def full_validation(project_root):
     - user_config: User-level config
     - project_config: Project-level config
     - python_exe: Validated Python executable path
-    - us_ice_witness: Path to us-ice-witness repo
+    - us_ice_witness: Path to us-ice-witness-repo repo
     """
     user_config = load_user_config()
     project_config = load_project_config(project_root)

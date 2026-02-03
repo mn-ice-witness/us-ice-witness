@@ -1,20 +1,20 @@
 #!/bin/bash
 # Install git hooks for a state data repository
-# Run this from the state repo root after creating the us-ice-witness symlink
+# Run this from the state repo root after creating the us-ice-witness-repo symlink
 
 set -e
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 HOOKS_DIR="$REPO_ROOT/.git/hooks"
-US_HOOKS="$REPO_ROOT/us-ice-witness/hooks"
+US_HOOKS="$REPO_ROOT/us-ice-witness-repo/hooks"
 
 if [ ! -d "$US_HOOKS" ]; then
-    echo "Error: us-ice-witness/hooks not found."
-    echo "Make sure you have the us-ice-witness symlink set up correctly."
+    echo "Error: us-ice-witness-repo/hooks not found."
+    echo "Make sure you have the us-ice-witness-repo symlink set up correctly."
     exit 1
 fi
 
-echo "Installing git hooks from us-ice-witness..."
+echo "Installing git hooks from us-ice-witness-repo..."
 
 # Install pre-commit hook
 if [ -f "$HOOKS_DIR/pre-commit" ]; then

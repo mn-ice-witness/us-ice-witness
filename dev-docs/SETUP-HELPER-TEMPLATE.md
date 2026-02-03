@@ -2,7 +2,7 @@
 
 **Copy this file to `SETUP-HELPER.md` in each state repo.**
 
-The setup helper must be in each state repo because users won't have the us-ice-witness symlink yet when they first clone.
+The setup helper must be in each state repo because users won't have the us-ice-witness-repo symlink yet when they first clone.
 
 ---
 
@@ -16,21 +16,21 @@ Copy everything below this line to create the state's SETUP-HELPER.md:
 
 ---
 
-## Step 1: Get the Shared Codebase (us-ice-witness)
+## Step 1: Get the Shared Codebase (us-ice-witness-repo)
 
-The shared codebase contains scripts, hooks, and documentation. It needs to be accessible as `us-ice-witness/` inside this state repo.
+The shared codebase contains scripts, hooks, and documentation. It needs to be accessible as `us-ice-witness-repo/` inside this state repo.
 
 First, check if it already exists:
 
 ```bash
-ls -la us-ice-witness/bin/config.py
+ls -la us-ice-witness-repo/bin/config.py
 ```
 
 **If it exists and works**, skip to Step 2.
 
 **If it doesn't exist**, ask the user which approach they prefer:
 
-> "I need to set up the shared us-ice-witness codebase. There are two options:"
+> "I need to set up the shared us-ice-witness-repo codebase. There are two options:"
 >
 > **Option A: Clone nearby + symlink (Recommended)**
 > - Good if you manage multiple state repos - they can share one copy
@@ -38,7 +38,7 @@ ls -la us-ice-witness/bin/config.py
 >
 > **Option B: Clone directly into this repo**
 > - Simpler if you only manage one state
-> - Creates `us-ice-witness/` folder directly here
+> - Creates `us-ice-witness-repo/` folder directly here
 >
 > "Which would you prefer?"
 
@@ -51,29 +51,29 @@ ls -la ../GIT_US_ICE_WITNESS
 
 If not found, clone it:
 ```bash
-git clone https://github.com/mn-ice-witness/us-ice-witness.git ../GIT_US_ICE_WITNESS
+git clone https://github.com/mn-ice-witness/us-ice-witness-repo.git ../GIT_US_ICE_WITNESS
 ```
 
 Then create the symlink:
 ```bash
-ln -s ../GIT_US_ICE_WITNESS us-ice-witness
+ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo
 ```
 
 ### If user chooses Option B (direct clone):
 
 ```bash
-git clone https://github.com/mn-ice-witness/us-ice-witness.git us-ice-witness
+git clone https://github.com/mn-ice-witness/us-ice-witness-repo.git us-ice-witness-repo
 ```
 
 ### Verify it worked:
 
 ```bash
-ls us-ice-witness/bin/config.py
+ls us-ice-witness-repo/bin/config.py
 ```
 
 If this fails, something went wrong. Check the clone/symlink and try again.
 
-Tell the user: "✓ us-ice-witness is set up correctly."
+Tell the user: "✓ us-ice-witness-repo is set up correctly."
 
 > **Note:** Git submodules may be used in the future to automate this. For now, the process is manual.
 
@@ -211,7 +211,7 @@ Tell the user:
 ## Step 8: Install Git Hooks
 
 ```bash
-./us-ice-witness/hooks/install-hooks.sh
+./us-ice-witness-repo/hooks/install-hooks.sh
 ```
 
 Tell the user:
@@ -240,7 +240,7 @@ Tell the user: "✓ Created required directories."
 Run the summary generator:
 
 ```bash
-./us-ice-witness/bin/run generate_summary.py
+./us-ice-witness-repo/bin/run generate_summary.py
 ```
 
 **If it succeeds:**
@@ -251,7 +251,7 @@ Run the summary generator:
 > - Process media: Put files in raw_media/ and tell me to process them
 > - Commit changes: The hooks will validate automatically
 >
-> "**IMPORTANT:** Now read `us-ice-witness/CONTEXT.md` for all the rules on adding incidents and media."
+> "**IMPORTANT:** Now read `us-ice-witness-repo/CONTEXT.md` for all the rules on adding incidents and media."
 
 **If it fails**, read the error and help fix it.
 
@@ -263,16 +263,16 @@ Run the summary generator:
 |------|---------|
 | Add incident | "Add this incident: [URL]" |
 | Process media | "Process the media in raw_media" |
-| Generate summary | `./us-ice-witness/bin/run generate_summary.py` |
-| Run media pipeline | `./us-ice-witness/bin/run process_media.py` |
+| Generate summary | `./us-ice-witness-repo/bin/run generate_summary.py` |
+| Run media pipeline | `./us-ice-witness-repo/bin/run process_media.py` |
 
 ## Troubleshooting
 
-### "us-ice-witness/bin not found"
+### "us-ice-witness-repo/bin not found"
 Symlink is broken:
 ```bash
-rm -f us-ice-witness
-ln -s ../GIT_US_ICE_WITNESS us-ice-witness
+rm -f us-ice-witness-repo
+ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo
 ```
 
 ### "No module named yaml"
@@ -282,7 +282,7 @@ python3 -m pip install pyyaml pillow
 
 ### Pre-commit hook not running
 ```bash
-./us-ice-witness/hooks/install-hooks.sh
+./us-ice-witness-repo/hooks/install-hooks.sh
 ```
 
 For more help: https://docs.ice-witness.org/setup

@@ -1,11 +1,11 @@
 #!/bin/bash
 # Pre-commit hook for state data repositories
-# This hook runs from the state repo and calls scripts from the us-ice-witness symlink
+# This hook runs from the state repo and calls scripts from the us-ice-witness-repo symlink
 
 set -e
 
 REPO_ROOT="$(git rev-parse --show-toplevel)"
-US_ICE_WITNESS="$REPO_ROOT/us-ice-witness"
+US_ICE_WITNESS="$REPO_ROOT/us-ice-witness-repo"
 US_BIN="$US_ICE_WITNESS/bin"
 DOCS_URL="https://docs.ice-witness.org"
 
@@ -30,18 +30,18 @@ success() {
     echo -e "${GREEN}✓${NC} $1"
 }
 
-# Step 1: Check us-ice-witness symlink
+# Step 1: Check us-ice-witness-repo symlink
 if [ ! -d "$US_ICE_WITNESS" ]; then
-    error_exit "us-ice-witness symlink not found.
+    error_exit "us-ice-witness-repo symlink not found.
 
 Create the symlink in your state repo:
-  ln -s ../GIT_US_ICE_WITNESS us-ice-witness"
+  ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo"
 fi
 
 if [ ! -d "$US_BIN" ]; then
-    error_exit "us-ice-witness/bin not found.
+    error_exit "us-ice-witness-repo/bin not found.
 
-The us-ice-witness symlink may be pointing to the wrong location.
+The us-ice-witness-repo symlink may be pointing to the wrong location.
 It should point to the GIT_US_ICE_WITNESS repository."
 fi
 
@@ -110,7 +110,7 @@ if ! "$PYTHON_EXE" "$US_BIN/generate_summary.py" > /dev/null 2>&1; then
     echo -e "${RED}❌ Incident validation failed.${NC}"
     echo ""
     echo "Run the following to see errors:"
-    echo "  $PYTHON_EXE us-ice-witness/bin/generate_summary.py"
+    echo "  $PYTHON_EXE us-ice-witness-repo/bin/generate_summary.py"
     exit 1
 fi
 

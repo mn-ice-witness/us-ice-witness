@@ -176,12 +176,12 @@ Use **removed** (not delete) when incident was published but later found incorre
 
 **Validation errors** - Run manually to see details:
 ```bash
-./us-ice-witness/bin/run generate_summary.py
+./us-ice-witness-repo/bin/run generate_summary.py
 ```
 
 **Changes not appearing** - Regenerate and amend:
 ```bash
-./us-ice-witness/bin/run generate_summary.py
+./us-ice-witness-repo/bin/run generate_summary.py
 git add docs/data/incidents-summary.json
 git commit --amend --no-edit
 git push --force

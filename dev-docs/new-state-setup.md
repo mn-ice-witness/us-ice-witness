@@ -9,7 +9,7 @@ Each state has:
 - A Cloudflare Pages project (`{state}-ice-witness`)
 - A subdomain (`{state}.ice-witness.org`)
 
-The state repos only contain **data** (incidents, media). The shared codebase is served from `us-ice-witness`.
+The state repos only contain **data** (incidents, media). The shared codebase is served from `us-ice-witness-repo`.
 
 ## Prerequisites
 
@@ -24,7 +24,7 @@ The state repos only contain **data** (incidents, media). The shared codebase is
 gh repo create mn-ice-witness/{state}-ice-witness --public
 
 # Clone locally
-cd ~/workspace/us-ice-witness
+cd ~/workspace/us-ice-witness-repo
 git clone https://github.com/mn-ice-witness/{state}-ice-witness.git GIT_{STATE}_ICE_WITNESS
 cd GIT_{STATE}_ICE_WITNESS
 ```
@@ -156,10 +156,10 @@ In Cloudflare Dashboard for `ice-witness.org`:
 1. Go to **DNS** → Add record:
    - Type: CNAME
    - Name: `{state}`
-   - Target: `us-ice-witness.pages.dev`
+   - Target: `us-ice-witness-repo.pages.dev`
    - Proxy: Yes (orange cloud)
 
-2. Go to **Workers & Pages** → `us-ice-witness` → Custom Domains:
+2. Go to **Workers & Pages** → `us-ice-witness-repo` → Custom Domains:
    - Add `{state}.ice-witness.org`
 
 ## Step 8: Create Supporting Files
@@ -190,17 +190,17 @@ Create a list of state-specific news sources. See existing state repos for forma
 
 Data repository for [{State} ICE Witness](https://{state}.ice-witness.org).
 
-This repo contains incident documentation only. The website code is in [us-ice-witness](https://github.com/mn-ice-witness/us-ice-witness).
+This repo contains incident documentation only. The website code is in [us-ice-witness-repo](https://github.com/mn-ice-witness/us-ice-witness-repo).
 
 ## Adding Incidents
 
-See [adding-incidents.md](https://github.com/mn-ice-witness/us-ice-witness/blob/main/dev-docs/adding-incidents.md) in the main repository.
+See [adding-incidents.md](https://github.com/mn-ice-witness/us-ice-witness-repo/blob/main/dev-docs/adding-incidents.md) in the main repository.
 ```
 
 ## Step 9: Create Symlink to Master Repo
 
 ```bash
-ln -s ../GIT_US_ICE_WITNESS us-ice-witness
+ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo
 ```
 
 ## Step 10: Commit and Push
@@ -223,7 +223,7 @@ git push origin main
 - [ ] Manual deployment works: `npx wrangler pages deploy docs --project-name={state}-ice-witness`
 - [ ] Data accessible: `curl https://{state}-ice-witness.pages.dev/data/incidents-summary.json`
 - [ ] CNAME record added for `{state}.ice-witness.org`
-- [ ] Custom domain added to `us-ice-witness` project
+- [ ] Custom domain added to `us-ice-witness-repo` project
 - [ ] Site loads: `https://{state}.ice-witness.org`
 
 ## Troubleshooting
@@ -284,5 +284,5 @@ GIT_{STATE}_ICE_WITNESS/
 ├── CONTEXT.md
 ├── NEWS-SOURCES.md
 ├── README.md
-└── us-ice-witness -> ../GIT_US_ICE_WITNESS
+└── us-ice-witness-repo -> ../GIT_US_ICE_WITNESS
 ```

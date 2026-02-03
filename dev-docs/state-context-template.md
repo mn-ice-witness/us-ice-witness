@@ -12,7 +12,7 @@ Copy this to `CONTEXT.md` in a new state repo and fill in the state-specific val
 **STOP. Before doing ANYTHING, you MUST read:**
 
 ```
-us-ice-witness/CONTEXT.md
+us-ice-witness-repo/CONTEXT.md
 ```
 
 **That file contains ALL the instructions for:**
@@ -25,9 +25,9 @@ us-ice-witness/CONTEXT.md
 
 **This file only contains [STATE NAME]-specific information. The master context has everything else.**
 
-If `us-ice-witness/` doesn't exist, create the symlink first:
+If `us-ice-witness-repo/` doesn't exist, create the symlink first:
 ```bash
-ln -s ../GIT_US_ICE_WITNESS us-ice-witness
+ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo
 ```
 
 ---
@@ -67,8 +67,8 @@ See `NEWS-SOURCES.md` for state-specific news sources to monitor.
 
 **Generate summary:**
 ```bash
-./us-ice-witness/bin/run generate_summary.py
+./us-ice-witness-repo/bin/run generate_summary.py
 ```
 
-**Remember: All detailed instructions are in `us-ice-witness/CONTEXT.md`**
+**Remember: All detailed instructions are in `us-ice-witness-repo/CONTEXT.md`**
 ```

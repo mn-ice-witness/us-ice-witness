@@ -1,9 +1,9 @@
 #!/bin/bash
 # Run a Python script using the Python from ~/.ice-witness.config
 #
-# Usage: ./us-ice-witness/bin/run <script.py> [args...]
-# Example: ./us-ice-witness/bin/run generate_summary.py
-#          ./us-ice-witness/bin/run process_media.py --force
+# Usage: ./us-ice-witness-repo/bin/run <script.py> [args...]
+# Example: ./us-ice-witness-repo/bin/run generate_summary.py
+#          ./us-ice-witness-repo/bin/run process_media.py --force
 
 set -e
 

@@ -124,12 +124,12 @@ mv "raw_media/Screen Recording.mov" raw_media/2026-01/15/2026-01-15-aurora-arres
 ## Processing
 
 ```bash
-./us-ice-witness/bin/run process_media.py
+./us-ice-witness-repo/bin/run process_media.py
 ```
 
 Force reprocess all:
 ```bash
-./us-ice-witness/bin/run process_media.py --force
+./us-ice-witness-repo/bin/run process_media.py --force
 ```
 
 ### What It Does
@@ -211,5 +211,5 @@ Create `docs/data/high-quality-videos.md` for videos needing less compression:
 
 **Video not appearing** - Check filename matches slug, then:
 ```bash
-./us-ice-witness/bin/run generate_summary.py
+./us-ice-witness-repo/bin/run generate_summary.py
 ```

@@ -12,7 +12,7 @@ This is the **master repository** containing all shared code, schemas, and docum
 
 - **This repo** (`us-ice-witness`): All site code (HTML/CSS/JS), scripts, schemas, docs
 - **State repos** (AL, CO, ME, WA): Data only—incidents, media, state-specific config
-- Each state repo links to this repo as `us-ice-witness/`
+- Each state repo links to this repo as `us-ice-witness-repo/`
 - State detection is via hostname (subdomain), not URL path
 
 ## URL Structure
@@ -122,10 +122,10 @@ Tell the AI: "Help me setup this state repo"
    ```bash
    # Option A: Clone nearby + symlink
    git clone https://github.com/mn-ice-witness/us-ice-witness.git ../GIT_US_ICE_WITNESS
-   ln -s ../GIT_US_ICE_WITNESS us-ice-witness
+   ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo
 
    # Option B: Clone directly
-   git clone https://github.com/mn-ice-witness/us-ice-witness.git us-ice-witness
+   git clone https://github.com/mn-ice-witness/us-ice-witness.git us-ice-witness-repo
    ```
 
 2. Create config files:
@@ -143,7 +143,7 @@ Tell the AI: "Help me setup this state repo"
 
 3. Install git hooks:
    ```bash
-   ./us-ice-witness/hooks/install-hooks.sh
+   ./us-ice-witness-repo/hooks/install-hooks.sh
    ```
 
 ---
@@ -159,7 +159,7 @@ Tell the AI: "Add this incident: [paste news URL]"
 1. Read the schema: `dev-docs/incident-schema.md`
 2. Create file: `docs/incidents/YYYY-MM/DD/YYYY-MM-DD-slug.md`
 3. Get timestamp: `date +"%Y-%m-%dT%H:%M:%S"` (NEVER make up timestamps)
-4. Generate summary: `./us-ice-witness/bin/run generate_summary.py`
+4. Generate summary: `./us-ice-witness-repo/bin/run generate_summary.py`
 5. Commit and push
 
 ---
@@ -173,7 +173,7 @@ Tell the AI: "Process the media in raw_media"
 ### Manual Method
 
 1. Put raw files in `raw_media/YYYY-MM/DD/slug.raw.mov`
-2. Run: `./us-ice-witness/bin/run process_media.py`
+2. Run: `./us-ice-witness-repo/bin/run process_media.py`
 3. Commit processed files in `docs/media/`
 
 ---
@@ -182,10 +182,10 @@ Tell the AI: "Process the media in raw_media"
 
 | Task | Command |
 |------|---------|
-| Generate summary | `./us-ice-witness/bin/run generate_summary.py` |
-| Process media | `./us-ice-witness/bin/run process_media.py` |
-| Force reprocess | `./us-ice-witness/bin/run process_media.py --force` |
-| Install hooks | `./us-ice-witness/hooks/install-hooks.sh` |
+| Generate summary | `./us-ice-witness-repo/bin/run generate_summary.py` |
+| Process media | `./us-ice-witness-repo/bin/run process_media.py` |
+| Force reprocess | `./us-ice-witness-repo/bin/run process_media.py --force` |
+| Install hooks | `./us-ice-witness-repo/hooks/install-hooks.sh` |
 
 ---
 
