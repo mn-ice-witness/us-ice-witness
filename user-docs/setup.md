@@ -2,31 +2,33 @@
 
 ## 1. Clone Your State Repository
 
+Example using the Colorado repo:
+
 ```bash
-mkdir -p ~/workspace/us-ice-witness
-cd ~/workspace/us-ice-witness
-git clone https://github.com/mn-ice-witness/co-ice-witness.git GIT_CO_ICE_WITNESS
-cd GIT_CO_ICE_WITNESS
+git clone https://github.com/mn-ice-witness/<STATE>-ice-witness.git <YOUR_FOLDER>
+cd <YOUR_FOLDER>
 ```
+
+Replace `<STATE>` with your state code (e.g., `co`, `al`, `me`, `wa`).
 
 ## 2. Get the Shared Codebase
 
-The shared `us-ice-witness-repo` codebase must be accessible as `us-ice-witness-repo/` in your state repo.
+The shared codebase must be accessible as `us-ice-witness-repo/` inside your state repo.
 
 **Option A: Clone nearby + symlink** (recommended for multiple state repos)
 
 ```bash
-cd ~/workspace/us-ice-witness
-git clone https://github.com/mn-ice-witness/us-ice-witness.git GIT_US_ICE_WITNESS
+# From your state repo's parent directory
+git clone https://github.com/mn-ice-witness/us-ice-witness.git us-ice-witness-shared
 
-cd GIT_CO_ICE_WITNESS
-ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo
+# From inside your state repo
+ln -s ../us-ice-witness-shared us-ice-witness-repo
 ```
 
 **Option B: Clone directly into state repo**
 
 ```bash
-cd GIT_CO_ICE_WITNESS
+# From inside your state repo
 git clone https://github.com/mn-ice-witness/us-ice-witness.git us-ice-witness-repo
 ```
 
@@ -107,15 +109,17 @@ If it runs without errors, you're ready.
 
 ## Final Structure
 
+If using Option A (symlink):
+
 ```
-~/workspace/us-ice-witness/
-├── GIT_US_ICE_WITNESS/           # Shared code
+<your-workspace>/
+├── us-ice-witness-shared/        # Shared codebase
 │   ├── bin/                      # Scripts
 │   ├── hooks/                    # Git hooks
 │   └── dev-docs/                 # Reference docs
 │
-└── GIT_CO_ICE_WITNESS/           # Your state data
-    ├── us-ice-witness-repo/           # Symlink to shared code
+└── <state-repo>/                 # Your state data
+    ├── us-ice-witness-repo/      # Symlink → ../us-ice-witness-shared
     ├── ice-witness.config        # State config
     ├── docs/
     │   ├── about.md              # About page
@@ -132,7 +136,8 @@ If it runs without errors, you're ready.
 Pull shared code updates periodically:
 
 ```bash
-cd ~/workspace/us-ice-witness/GIT_US_ICE_WITNESS
+# Navigate to your shared codebase folder and pull
+cd us-ice-witness-shared  # or us-ice-witness-repo if using Option B
 git pull
 ```
 
@@ -143,7 +148,7 @@ git pull
 **"us-ice-witness-repo/bin not found"**
 ```bash
 rm -f us-ice-witness-repo
-ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo
+ln -s ../us-ice-witness-shared us-ice-witness-repo
 ```
 
 **"No module named 'yaml'"**
