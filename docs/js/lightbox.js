@@ -526,8 +526,21 @@ const Lightbox = {
      * Render about content
      */
     async renderAboutContent() {
-        const response = await fetch('/about.md');
-        const content = await response.text();
+        // Fetch from state data source if available, otherwise local
+        let content;
+        const stateDataUrl = window.StateConfig?.getDataUrl();
+        if (stateDataUrl) {
+            try {
+                const response = await fetch(`${stateDataUrl}/about.md`);
+                if (response.ok) {
+                    content = await response.text();
+                }
+            } catch (e) { /* fall through to local */ }
+        }
+        if (!content) {
+            const response = await fetch('/about.md');
+            content = await response.text();
+        }
 
         const shareButton = LightboxContent.renderShareButton();
         const bodyHtml = marked.parse(content);

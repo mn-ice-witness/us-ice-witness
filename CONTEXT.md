@@ -6,23 +6,39 @@ This is the **master repository** containing all shared code, schemas, and docum
 
 ---
 
+## Relationship to MN ICE Witness
+
+**DO NOT modify the MN ICE Witness project.** MN ICE Witness (`mn-ice-witness.org`) is a completely separate, independent project. It was the original site, is more mature, and is still under active development. This multi-state project was built based on that site, but they are not connected at runtime.
+
+- MN ICE Witness has its own repo, its own deployment, and its own maintainers
+- This repo does NOT serve MN — there is no MN state repo in this system
+- Changes may be migrated from MN to this project in the future, but that is a manual, deliberate process
+- MN may eventually be brought into this multi-state system, but that has not happened yet
+
+**When working in this repo, never make changes that assume MN is part of this system or that affect the MN project.**
+
+---
+
 ## Architecture
 
 **One codebase, multiple subdomains:**
 
 - **This repo** (`us-ice-witness`): All site code (HTML/CSS/JS), scripts, schemas, docs
-- **State repos** (AL, CO, ME, WA): Data only—incidents, media, state-specific config
+- **State repos** (AL, CO, ME, WA): Data only—incidents, media, state-specific about page, state-specific config
 - Each state repo links to this repo as `us-ice-witness-repo/`
 - State detection is via hostname (subdomain), not URL path
+- Each state has its own `docs/about.md` fetched from its own deployment
 
 ## URL Structure
 
 | Domain | Purpose |
 |--------|---------|
-| `co.ice-witness.org` | Colorado |
-| `al.ice-witness.org` | Alabama |
-| `me.ice-witness.org` | Maine |
-| `wa.ice-witness.org` | Washington |
+| `co.ice-witness.org` | Colorado (active) |
+| `al.ice-witness.org` | Alabama (inactive) |
+| `me.ice-witness.org` | Maine (inactive) |
+| `wa.ice-witness.org` | Washington (inactive) |
+
+**Only CO is actively maintained at this time.** Other state repos exist but are not in use. They will need updates (CORS headers, about page, etc.) if/when they go live.
 
 ---
 

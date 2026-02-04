@@ -43,6 +43,16 @@ mkdir -p docs/data docs/incidents docs/media
   Access-Control-Allow-Origin: *
   Access-Control-Allow-Methods: GET, OPTIONS
   Access-Control-Allow-Headers: Content-Type
+
+/incidents/*
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, OPTIONS
+  Access-Control-Allow-Headers: Content-Type
+
+/about.md
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, OPTIONS
+  Access-Control-Allow-Headers: Content-Type
 ```
 
 **docs/data/incidents-summary.json** (start with empty):
@@ -162,7 +172,24 @@ In Cloudflare Dashboard for `ice-witness.org`:
 2. Go to **Workers & Pages** → `us-ice-witness-repo` → Custom Domains:
    - Add `{state}.ice-witness.org`
 
-## Step 8: Create Supporting Files
+## Step 8: Create About Page
+
+Copy the about page template from the US repo and customize it:
+
+```bash
+cp ../GIT_US_ICE_WITNESS/docs/about.md docs/about.md
+```
+
+Edit `docs/about.md` to replace:
+- `[STATE]` with your state name (e.g., "Colorado")
+- `[DATE]` with the current date
+- `[State]` and `[List local newspapers...]` in Source Tiers with local outlets
+- Background section with state-specific context
+- Add social media links if desired (see HTML comment in template)
+
+The about page is fetched from each state's data deployment, so state maintainers have full control over their content.
+
+## Step 9: Create Supporting Files
 
 **CONTEXT.md** (for Claude Code):
 ```markdown
@@ -197,13 +224,13 @@ This repo contains incident documentation only. The website code is in [us-ice-w
 See [adding-incidents.md](https://github.com/mn-ice-witness/us-ice-witness-repo/blob/main/dev-docs/adding-incidents.md) in the main repository.
 ```
 
-## Step 9: Create Symlink to Master Repo
+## Step 10: Create Symlink to Master Repo
 
 ```bash
 ln -s ../GIT_US_ICE_WITNESS us-ice-witness-repo
 ```
 
-## Step 10: Commit and Push
+## Step 11: Commit and Push
 
 ```bash
 git add .
@@ -273,6 +300,7 @@ GIT_{STATE}_ICE_WITNESS/
 │       └── deploy.yml          # GitHub Actions deployment
 ├── docs/
 │   ├── _headers                # CORS headers (CRITICAL)
+│   ├── about.md                # State-specific about page
 │   ├── data/
 │   │   └── incidents-summary.json
 │   ├── incidents/
