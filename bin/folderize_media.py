@@ -82,8 +82,7 @@ def main():
 
     dry_run = not args.execute
 
-    script_dir = Path(__file__).parent
-    project_root = script_dir.parent
+    project_root = Path.cwd()
     docs_media = project_root / "docs" / "media"
     raw_media = project_root / "raw_media"
 

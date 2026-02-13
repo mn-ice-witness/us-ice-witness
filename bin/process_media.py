@@ -684,8 +684,7 @@ def main():
     )
     args = parser.parse_args()
 
-    script_dir = Path(__file__).parent
-    project_root = script_dir.parent
+    project_root = Path.cwd()
     raw_dir = project_root / "raw_media"
     output_dir = project_root / "docs" / "media"
 
