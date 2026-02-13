@@ -6,22 +6,24 @@ How to capture, process, and add video/image clips to incidents.
 
 When you clip a video from a source (social media, news site, etc.), you'll often take multiple attempts. The workflow:
 
-1. Record screen clips to `raw_media/` (macOS names them "Screen Recording YYYY-MM-DD at HH.MM.SS AM/PM.mov")
-2. Use the script to move the latest one to the correct folder with the proper name
+1. Record screen clips (macOS saves them as "Screen Recording YYYY-MM-DD at HH.MM.SS AM/PM.mov")
+2. Rename the file to match the incident slug and place in `raw_media/`
 3. Run the media pipeline
 4. Clean up failed attempts
 
 ## Quick Commands
 
 ```bash
-# Move latest screen recording for an incident (video)
-./scripts/move-screen-recording.sh --type mov INCIDENT_ID
+# Rename and place file directly (Procedure 1)
+mkdir -p raw_media/YYYY-MM/DD
+mv "raw_media/Screen Recording.mov" raw_media/YYYY-MM/DD/INCIDENT_ID.raw.mov
 
-# Move latest screen recording for an incident (image/screenshot)
-./scripts/move-screen-recording.sh --type png INCIDENT_ID
+# Or drop in raw_media root and folderize (Procedure 2)
+mv "raw_media/Screen Recording.mov" raw_media/INCIDENT_ID.raw.mov
+./us-ice-witness-repo/bin/run folderize_media.py --execute
 
-# Run media pipeline after moving
-python-main bin/run-media-pipeline.py INCIDENT_ID
+# Run media pipeline after placing the file
+./us-ice-witness-repo/bin/run run-media-pipeline.py
 ```
 
 ## Full Workflow
@@ -31,32 +33,34 @@ python-main bin/run-media-pipeline.py INCIDENT_ID
 1. Find the source video/image
 2. Use macOS screen recording (Cmd+Shift+5) or screenshot (Cmd+Shift+4)
 3. **Save directly to `raw_media/`** (not Desktop or Downloads)
-4. Take multiple attempts if needed - only the latest one will be kept
+4. Take multiple attempts if needed — only keep the best one
 
-### Step 2: Move and Rename
+### Step 2: Rename and Place the File
 
-Run the script with the incident ID:
+**Option A — Create the folder yourself:**
 
 ```bash
-./scripts/move-screen-recording.sh --type mov 2026-01-24-nur-d-rapper-detained
+mkdir -p raw_media/2026-01/24
+mv "raw_media/Screen Recording 2026-01-24 at 3.45.22 PM.mov" raw_media/2026-01/24/2026-01-24-nur-d-rapper-detained.raw.mov
 ```
 
-This will:
-- Find the latest `Screen Recording*.mov` in `raw_media/`
-- Create `raw_media/2026-01/24/` if needed
-- Move and rename to `raw_media/2026-01/24/2026-01-24-nur-d-rapper-detained.raw.mov`
-- Delete all other `Screen Recording*.mov` files in `raw_media/`
-
-For screenshots/images, use `--type png`:
+**Option B — Drop in root and use folderize:**
 
 ```bash
-./scripts/move-screen-recording.sh --type png 2026-01-24-some-incident
+mv "raw_media/Screen Recording 2026-01-24 at 3.45.22 PM.mov" raw_media/2026-01-24-nur-d-rapper-detained.raw.mov
+./us-ice-witness-repo/bin/run folderize_media.py --execute
+```
+
+For screenshots/images, use the same process but with `.raw.png`:
+
+```bash
+mv "raw_media/Screenshot 2026-01-24 at 3.45.22 PM.png" raw_media/2026-01/24/2026-01-24-some-incident.raw.png
 ```
 
 ### Step 3: Run Media Pipeline
 
 ```bash
-python-main bin/run-media-pipeline.py INCIDENT_ID
+./us-ice-witness-repo/bin/run run-media-pipeline.py
 ```
 
 This compresses the video/image and generates an OG image for social sharing. The summary generator automatically detects media by matching filenames to incident slugs — no need to update the incident file.
@@ -65,29 +69,15 @@ This compresses the video/image and generates an OG image for social sharing. Th
 
 Check that:
 - `docs/media/` contains the processed file
-- `docs/og/` contains the OG image (for videos)
 - The incident page shows the video/image
 
-## Script Details
+### Step 5: Clean Up
 
-**Location:** `scripts/move-screen-recording.sh`
-
-**Arguments:**
-- `--type mov|png` (required) - File type to process
-- `INCIDENT_ID` (required) - Must be in format `YYYY-MM-DD-name`
-
-**What it does:**
-1. Validates the incident ID format
-2. Extracts date parts to determine target folder
-3. Finds the latest Screen Recording of the specified type
-4. Creates target directory if needed
-5. Moves and renames the file
-6. Deletes all other Screen Recording files of that type
-
-**Error handling:**
-- Exits if no Screen Recording files found
-- Exits if incident ID format is invalid
-- Shows helpful error messages
+Delete leftover screen recording attempts:
+```bash
+rm raw_media/Screen*.mov
+rm raw_media/Screen*.png
+```
 
 ## Common Scenarios
 
@@ -95,29 +85,16 @@ Check that:
 
 Use numbered suffixes:
 ```bash
-# First clip
-./scripts/move-screen-recording.sh --type mov 2026-01-24-incident-name
-# Then manually rename to: 2026-01-24-incident-name:01.raw.mov
-
-# Second clip
-./scripts/move-screen-recording.sh --type mov 2026-01-24-incident-name
-# Then manually rename to: 2026-01-24-incident-name:02.raw.mov
+mv "Screen Recording 1.mov" raw_media/2026-01/24/2026-01-24-incident-name:01.raw.mov
+mv "Screen Recording 2.mov" raw_media/2026-01/24/2026-01-24-incident-name:02.raw.mov
 ```
 
 ### Both Video and Image for Same Incident
 
-Run the script twice with different types:
+Just name them with the same slug but different extensions:
 ```bash
-./scripts/move-screen-recording.sh --type mov 2026-01-24-incident-name
-./scripts/move-screen-recording.sh --type png 2026-01-24-incident-name
-```
-
-### Cleanup Without Moving
-
-If you just want to delete all Screen Recording files:
-```bash
-rm raw_media/Screen*.mov
-rm raw_media/Screen*.png
+mv clip.mov raw_media/2026-01/24/2026-01-24-incident-name.raw.mov
+mv screenshot.png raw_media/2026-01/24/2026-01-24-incident-name.raw.png
 ```
 
 ## Folder Structure
@@ -139,13 +116,12 @@ raw_media/
 
 When asking Claude to process a screen recording, say:
 
-> "Move the latest mov to raw for [INCIDENT_ID] and run the media pipeline"
+> "Move the latest recording to raw for [INCIDENT_ID] and run the media pipeline"
 
 or
 
-> "Move latest png for [INCIDENT_ID], run pipeline"
+> "Move latest screenshot for [INCIDENT_ID], run pipeline"
 
 Claude will:
-1. Run `./scripts/move-screen-recording.sh --type mov|png INCIDENT_ID`
-2. Run `python-main bin/run-media-pipeline.py INCIDENT_ID`
-3. Update the incident file's `media` field if needed
+1. Rename and move the file to the correct `raw_media/YYYY-MM/DD/` folder
+2. Run `./us-ice-witness-repo/bin/run run-media-pipeline.py`

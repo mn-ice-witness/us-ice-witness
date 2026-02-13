@@ -2,13 +2,28 @@
 
 ## Requirements
 
-Install ffmpeg for media processing:
+### ffmpeg
+
+Required for all media processing (video compression, image optimization, OG images).
 
 | Platform | Command |
 |----------|---------|
 | macOS | `brew install ffmpeg` |
 | Ubuntu | `sudo apt install ffmpeg` |
 | Windows | `choco install ffmpeg` |
+
+### Python Packages
+
+Install these in the Python environment from `~/.ice-witness.config`:
+
+```bash
+<your-python> -m pip install pyyaml pillow
+```
+
+| Package | pip name | Purpose |
+|---------|----------|---------|
+| PyYAML | `pyyaml` | Config file parsing |
+| Pillow | `pillow` | Site-level OG image generation |
 
 ---
 
@@ -49,37 +64,63 @@ Should show both `codec_type=video` and `codec_type=audio`.
 
 ---
 
-## Workflow
+## How Media Works
 
-1. **Capture** - Record video or screenshot
-2. **Move** - Put file in `raw_media/` with correct name
-3. **Process** - Run the pipeline
-4. **Commit** - Push processed files
+Media files are matched to incidents **by filename**. No field in the incident file needs updating — the system finds media automatically.
+
+| Incident File | Raw Media | Processed Output |
+|--------------|-----------|-----------------|
+| `2026-01-15-aurora-arrest.md` | `2026-01-15-aurora-arrest.raw.mov` | `2026-01-15-aurora-arrest.mp4` |
+| `2026-01-15-aurora-arrest.md` | `2026-01-15-aurora-arrest.raw.png` | `2026-01-15-aurora-arrest.jpg` |
 
 ---
 
-## Capturing
+## Adding Media: Two Methods
 
-### macOS
+### Method 1: Create the Folder Yourself
 
-- **Screen Record:** Cmd+Shift+5 → Record Selected Portion
-- **Screenshot:** Cmd+Shift+4
+Use this when you know the incident ID and want to place the file directly.
 
-### Windows
+1. **Get the incident ID** (the filename without `.md`): `2026-01-15-aurora-arrest`
+2. **Create the date folder:**
+   ```bash
+   mkdir -p raw_media/2026-01/15
+   ```
+3. **Move and rename the file** (must include `.raw` before the extension):
+   ```bash
+   mv ~/Downloads/my-clip.mov raw_media/2026-01/15/2026-01-15-aurora-arrest.raw.mov
+   ```
+4. **Run the pipeline:**
+   ```bash
+   ./us-ice-witness-repo/bin/run run-media-pipeline.py
+   ```
 
-- **Screen Record:** Win+G (Xbox Game Bar)
-- **Screenshot:** Win+Shift+S
+### Method 2: Drop in raw_media Root + Use Helper Script
 
-**Tips:**
-- Crop tight to the video area
-- Keep clips under 30 seconds
-- Include captions if visible
+Use this when you want to skip creating folders manually. The script figures out the folder from the filename.
+
+1. **Rename and drop the file in `raw_media/`** (the root, not a subfolder):
+   ```bash
+   mv ~/Downloads/my-clip.mov raw_media/2026-01-15-aurora-arrest.raw.mov
+   ```
+2. **Run the folderize script** to move it to the right folder:
+   ```bash
+   # Preview first (moves nothing):
+   ./us-ice-witness-repo/bin/run folderize_media.py
+
+   # Actually move:
+   ./us-ice-witness-repo/bin/run folderize_media.py --execute
+   ```
+3. **Run the pipeline:**
+   ```bash
+   ./us-ice-witness-repo/bin/run run-media-pipeline.py
+   ```
 
 ---
 
 ## File Naming
 
-Raw files must match the incident slug:
+Raw files must match the incident slug and include `.raw` before the extension:
 
 | Raw File | Output |
 |----------|--------|
@@ -99,65 +140,49 @@ Parts concatenate in order into single video. Start at `:01`, no gaps.
 
 ---
 
-## raw_media Structure
+## Folder Structure
 
 ```
-raw_media/
+raw_media/                    # NOT in git (local backups)
 └── 2026-01/
     └── 15/
         └── 2026-01-15-aurora-arrest.raw.mov
-```
 
-`raw_media/` is not tracked by git. Keep raw files locally as backups.
-
----
-
-## Moving Files
-
-```bash
-mkdir -p raw_media/2026-01/15
-mv "raw_media/Screen Recording.mov" raw_media/2026-01/15/2026-01-15-aurora-arrest.raw.mov
-```
-
----
-
-## Processing
-
-```bash
-./us-ice-witness-repo/bin/run process_media.py
-```
-
-Force reprocess all:
-```bash
-./us-ice-witness-repo/bin/run process_media.py --force
-```
-
-### What It Does
-
-**Videos:**
-- H.264, 720p max
-- Audio normalization
-- Crops 8px edges
-- 30fps max
-
-**Images:**
-- JPEG, 1200px max width
-
-**OG Images:**
-- Frame at 2 seconds
-- 1200x630 for social sharing
-
----
-
-## Output
-
-```
-docs/media/
+docs/media/                   # In git (deployed to site)
 └── 2026-01/
     └── 15/
         ├── 2026-01-15-aurora-arrest.mp4
         └── 2026-01-15-aurora-arrest-og-2s-1234567890.jpg
 ```
+
+---
+
+## Processing Details
+
+### What It Does
+
+**Videos:**
+- H.264, 720p max
+- Audio normalization (EBU R128)
+- Crops 8px edges
+- 30fps max
+- Web-optimized (faststart)
+
+**Images:**
+- JPEG, 1200px max width
+
+**OG Images (videos only):**
+- Frame at 2 seconds (customizable)
+- 1200x630 for social sharing
+
+### Commands
+
+| Task | Command |
+|------|---------|
+| Process media | `./us-ice-witness-repo/bin/run process_media.py` |
+| Force reprocess | `./us-ice-witness-repo/bin/run process_media.py --force` |
+| Full pipeline (process + summary) | `./us-ice-witness-repo/bin/run run-media-pipeline.py` |
+| Organize flat files into folders | `./us-ice-witness-repo/bin/run folderize_media.py --execute` |
 
 ---
 
@@ -205,11 +230,28 @@ Create `docs/data/high-quality-videos.md` for videos needing less compression:
 
 ---
 
+## Custom OG Source Images
+
+Provide a custom image instead of extracting a video frame:
+
+```
+raw_media/2026-01/15/2026-01-15-aurora-arrest.raw_og.png
+```
+
+Scaled to 1200x630 with letterboxing.
+
+---
+
 ## Troubleshooting
 
-**"ffmpeg not found"** - Install ffmpeg
+**"ffmpeg not found"** — Install ffmpeg (see Requirements above)
 
-**Video not appearing** - Check filename matches slug, then:
+**Video not appearing on site** — Check filename matches incident slug, then:
 ```bash
 ./us-ice-witness-repo/bin/run generate_summary.py
+```
+
+**Missing Python packages** — Install them:
+```bash
+<your-python> -m pip install pyyaml pillow
 ```
