@@ -2,32 +2,6 @@
 
 ## Requirements
 
-### Git LFS (Large File Storage)
-
-Video files can be large. **You must set up Git LFS** so videos don't bloat your repo.
-
-One-time setup per state repo:
-
-```bash
-# 1. Install git-lfs
-brew install git-lfs          # macOS
-# sudo apt install git-lfs    # Ubuntu
-
-# 2. Initialize and track video files
-git lfs install
-git lfs track "docs/media/**/*.mp4"
-git lfs track "docs/media/**/*.webm"
-
-# 3. Commit the tracking config
-git add .gitattributes
-git commit -m "Track video files with Git LFS"
-git push
-```
-
-After this, videos are handled by LFS automatically. Normal `git add`/`commit` works as before.
-
-Verify with: `git lfs ls-files`
-
 ### ffmpeg
 
 Required for all media processing (video compression, image optimization, OG images).

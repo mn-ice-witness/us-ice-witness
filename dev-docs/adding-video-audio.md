@@ -2,56 +2,11 @@
 
 *For AI assistants helping users add video or image media to incidents.*
 
+## Important: No Git LFS
+
+**Do NOT set up Git LFS.** The media pipeline compresses videos to well under GitHub's 100MB limit (typically 1-6MB per video). Processed files are committed directly to git as regular files. LFS adds complexity and causes broken pointer files when contributors don't have it installed.
+
 ## Prerequisites
-
-### Git LFS (Large File Storage)
-
-Video files in `docs/media/` can be large. **State repos must set up Git LFS** so these files are stored efficiently on GitHub instead of bloating the repo history.
-
-This is a one-time setup per state repo. An AI assistant can do this for you — just say "Set up Git LFS for video files."
-
-**Step 1: Install git-lfs (system-level, once per machine):**
-
-| Platform | Install Command |
-|----------|----------------|
-| macOS | `brew install git-lfs` |
-| Ubuntu | `sudo apt install git-lfs` |
-| Windows | `choco install git-lfs` |
-
-**Step 2: Initialize LFS and track video files (run from the state repo root):**
-
-```bash
-git lfs install
-git lfs track "docs/media/**/*.mp4"
-git lfs track "docs/media/**/*.webm"
-```
-
-**Step 3: Commit the `.gitattributes` file that was created:**
-
-```bash
-git add .gitattributes
-git commit -m "Track video files with Git LFS"
-git push
-```
-
-After this, all `.mp4` and `.webm` files committed under `docs/media/` are automatically handled by LFS. No further action is needed — `git add` and `git commit` work exactly as before.
-
-**Verifying LFS is working:**
-
-```bash
-git lfs ls-files
-```
-
-This lists all files currently tracked by LFS. After processing media and committing, video files should appear here.
-
-**If a state repo already has video files committed without LFS**, you need to migrate them:
-
-```bash
-git lfs migrate import --include="docs/media/**/*.mp4,docs/media/**/*.webm" --everything
-git push --force
-```
-
-This rewrites history to move existing videos into LFS. Requires a force push.
 
 ### System Tools
 
