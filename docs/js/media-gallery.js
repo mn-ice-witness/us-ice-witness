@@ -12,6 +12,8 @@
  */
 
 const MediaGallery = {
+    scrollObserver: null,
+
     /**
      * Get number of columns based on viewport width
      */
@@ -117,10 +119,50 @@ const MediaGallery = {
 
         const mediaNote = document.createElement('div');
         mediaNote.className = 'media-gallery-note';
-        mediaNote.innerHTML = 'Videos are clips edited to key moments. Tap video for sources and full context.';
+        if (typeof Search !== 'undefined' && Search.hasActiveFilters && Search.hasActiveFilters() && typeof App !== 'undefined') {
+            mediaNote.textContent = App.buildSearchBarText(App.getFilteredIncidents());
+        } else {
+            mediaNote.innerHTML = 'Videos are clips edited to key moments. Tap video for sources and full context.';
+        }
         gallery.appendChild(mediaNote);
 
         columns.forEach(col => gallery.appendChild(col.element));
+
+        // No-news-media section at the bottom
+        const noNewsMediaIncidents = App.incidents.filter(i =>
+            i.trustworthiness === 'no-news-media' && i.hasLocalMedia
+        );
+        if (noNewsMediaIncidents.length > 0) {
+            const sectionHeader = document.createElement('div');
+            sectionHeader.className = 'media-gallery-section-header';
+            sectionHeader.innerHTML = '<h3>Unverified by News Media</h3><p>These incidents have video or photo evidence but have not yet been covered by news outlets.</p>';
+            gallery.appendChild(sectionHeader);
+
+            const noNewsCards = noNewsMediaIncidents.map(incident => {
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = this.renderCard(incident);
+                const cardEl = wrapper.firstElementChild;
+                this.setupCardControls(cardEl);
+                cardEl.addEventListener('click', () => Lightbox.open(incident));
+                const estimatedHeight = incident.aspectRatio ? (1 / incident.aspectRatio) : 1;
+                return { element: cardEl, height: estimatedHeight };
+            });
+
+            const noNewsColumns = [];
+            for (let i = 0; i < columnCount; i++) {
+                noNewsColumns.push({ element: document.createElement('div'), cards: [], height: 0 });
+                noNewsColumns[i].element.className = 'gallery-column';
+            }
+            noNewsCards.forEach((card, index) => {
+                const colIdx = index % columnCount;
+                noNewsColumns[colIdx].cards.push(card);
+                noNewsColumns[colIdx].height += card.height;
+            });
+            for (const col of noNewsColumns) {
+                for (const card of col.cards) col.element.appendChild(card.element);
+            }
+            noNewsColumns.forEach(col => gallery.appendChild(col.element));
+        }
 
         const footer = document.createElement('div');
         footer.className = 'media-gallery-footer';
@@ -139,9 +181,11 @@ const MediaGallery = {
      * Setup IntersectionObserver for scroll-to-play
      */
     setupScrollToPlay(gallery) {
+        if (this.scrollObserver) this.scrollObserver.disconnect();
+
         const videos = gallery.querySelectorAll('.media-card-video');
 
-        const observer = new IntersectionObserver((entries) => {
+        this.scrollObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 const video = entry.target;
                 if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
@@ -152,7 +196,53 @@ const MediaGallery = {
             });
         }, { threshold: [0, 0.4, 0.6, 1] });
 
-        videos.forEach(video => observer.observe(video));
+        videos.forEach(video => this.scrollObserver.observe(video));
+    },
+
+    /**
+     * Stop all video loading/playback and disconnect observer.
+     * Called when switching away from media tab.
+     */
+    cleanup() {
+        if (this.scrollObserver) {
+            this.scrollObserver.disconnect();
+            this.scrollObserver = null;
+        }
+        document.querySelectorAll('.media-card-video').forEach(video => {
+            video.pause();
+            video.removeAttribute('src');
+            video.load();
+        });
+    },
+
+    /**
+     * Pause all video downloads to free HTTP connections.
+     * Saves src to data-src so resumeDownloads() can restore them.
+     * Called when lightbox opens — needed because wrangler serves HTTP/1.1
+     * locally (6 connection limit), and video downloads block .md fetches.
+     */
+    pauseDownloads() {
+        if (this.scrollObserver) this.scrollObserver.disconnect();
+        document.querySelectorAll('.media-card-video').forEach(video => {
+            if (video.src) video.dataset.src = video.src;
+            video.pause();
+            video.removeAttribute('src');
+            video.load();
+        });
+    },
+
+    /**
+     * Restore video downloads after lightbox closes.
+     */
+    resumeDownloads() {
+        const gallery = document.querySelector('.media-gallery');
+        document.querySelectorAll('.media-card-video').forEach(video => {
+            if (video.dataset.src) {
+                video.src = video.dataset.src;
+                delete video.dataset.src;
+            }
+        });
+        if (gallery) this.setupScrollToPlay(gallery);
     },
 
     /**
@@ -206,22 +296,22 @@ const MediaGallery = {
             videoControls = `
                 <div class="media-controls">
                     <button class="media-control-btn play-pause-btn" aria-label="Play/Pause">
-                        <svg class="media-icon-pause" viewBox="0 0 24 24" width="24" height="24"><use href="#icon-pause"/></svg>
-                        <svg class="media-icon-play" viewBox="0 0 24 24" width="24" height="24" style="display:none"><use href="#icon-play"/></svg>
+                        <svg class="media-icon-pause" viewBox="0 0 24 24" width="28" height="28"><use href="#icon-pause"/></svg>
+                        <svg class="media-icon-play" viewBox="0 0 24 24" width="28" height="28" style="display:none"><use href="#icon-play"/></svg>
                     </button>
                     <div class="time-slider-container">
                         <input type="range" class="time-slider" min="0" max="100" value="0" step="0.1" aria-label="Video progress">
                     </div>
                     <button class="media-control-btn restart-btn" aria-label="Restart">
-                        <svg viewBox="0 0 24 24" width="24" height="24"><use href="#icon-restart"/></svg>
+                        <svg viewBox="0 0 24 24" width="28" height="28"><use href="#icon-restart"/></svg>
                     </button>
                     <button class="media-control-btn audio-toggle muted" aria-label="Toggle sound">
-                        <svg class="speaker-icon" viewBox="0 0 24 24" width="24" height="24"><use href="#icon-speaker"/></svg>
-                        <svg class="mute-x" viewBox="0 0 24 24" width="24" height="24"><use href="#icon-mute-x"/></svg>
+                        <svg class="icon-unmuted" viewBox="0 0 24 24" width="28" height="28" style="display:none"><use href="#icon-speaker"/></svg>
+                        <svg class="icon-muted" viewBox="0 0 24 24" width="28" height="28"><use href="#icon-speaker-muted"/></svg>
                     </button>
                     <button class="media-control-btn fullscreen-btn" aria-label="Fullscreen">
-                        <svg class="fullscreen-enter" viewBox="0 0 24 24" width="24" height="24"><use href="#icon-fullscreen-enter"/></svg>
-                        <svg class="fullscreen-exit" viewBox="0 0 24 24" width="24" height="24" style="display:none"><use href="#icon-fullscreen-exit"/></svg>
+                        <svg class="fullscreen-enter" viewBox="0 0 24 24" width="28" height="28"><use href="#icon-fullscreen-enter"/></svg>
+                        <svg class="fullscreen-exit" viewBox="0 0 24 24" width="28" height="28" style="display:none"><use href="#icon-fullscreen-exit"/></svg>
                     </button>
                 </div>
             `;
@@ -230,8 +320,8 @@ const MediaGallery = {
             videoControls = `
                 <div class="media-controls">
                     <button class="media-control-btn fullscreen-btn" aria-label="Fullscreen">
-                        <svg class="fullscreen-enter" viewBox="0 0 24 24" width="24" height="24"><use href="#icon-fullscreen-enter"/></svg>
-                        <svg class="fullscreen-exit" viewBox="0 0 24 24" width="24" height="24" style="display:none"><use href="#icon-fullscreen-exit"/></svg>
+                        <svg class="fullscreen-enter" viewBox="0 0 24 24" width="28" height="28"><use href="#icon-fullscreen-enter"/></svg>
+                        <svg class="fullscreen-exit" viewBox="0 0 24 24" width="28" height="28" style="display:none"><use href="#icon-fullscreen-exit"/></svg>
                     </button>
                 </div>
             `;
@@ -322,6 +412,10 @@ const MediaGallery = {
         });
         document.querySelectorAll('.media-card .audio-toggle').forEach(btn => {
             btn.classList.add('muted');
+            const unmutedIcon = btn.querySelector('.icon-unmuted');
+            const mutedIcon = btn.querySelector('.icon-muted');
+            if (unmutedIcon) unmutedIcon.style.display = 'none';
+            if (mutedIcon) mutedIcon.style.display = '';
         });
     }
 };

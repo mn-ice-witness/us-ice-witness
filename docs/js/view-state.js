@@ -252,6 +252,7 @@ const ViewState = {
         if (view === 'list') {
             listView.style.display = '';
             mediaGallery.style.display = 'none';
+            if (typeof MediaGallery !== 'undefined') MediaGallery.cleanup();
             if (typeof App !== 'undefined') App.render();
         } else {
             listView.style.display = 'none';

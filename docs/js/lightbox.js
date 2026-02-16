@@ -100,6 +100,7 @@ const Lightbox = {
      */
     async open(incident) {
         App.muteAllGalleryVideos();
+        if (location.hostname === 'localhost') MediaGallery.pauseDownloads();
         this.bodyElement.innerHTML = '<div class="table-loading">Loading...</div>';
         this.element.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
@@ -485,6 +486,8 @@ const Lightbox = {
             video.pause();
             video.muted = true;
         }
+
+        if (location.hostname === 'localhost') MediaGallery.resumeDownloads();
 
         this.element.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';

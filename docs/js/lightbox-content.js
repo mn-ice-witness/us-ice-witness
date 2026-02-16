@@ -73,23 +73,23 @@ const LightboxContent = {
                 <div class="video-loading-overlay"><div class="video-loading-spinner"></div></div>
                 <div class="media-controls">
                     <button class="media-control-btn play-pause-btn" aria-label="Play/Pause">
-                        <svg class="media-icon-pause" viewBox="0 0 24 24" width="24" height="24"><use href="#icon-pause"/></svg>
-                        <svg class="media-icon-play" viewBox="0 0 24 24" width="24" height="24" style="display:none"><use href="#icon-play"/></svg>
+                        <svg class="media-icon-pause" viewBox="0 0 24 24" width="28" height="28"><use href="#icon-pause"/></svg>
+                        <svg class="media-icon-play" viewBox="0 0 24 24" width="28" height="28" style="display:none"><use href="#icon-play"/></svg>
                     </button>
                     <div class="time-slider-container">
                         <input type="range" class="time-slider" min="0" max="100" value="0" step="0.1" aria-label="Video progress">
                         <span class="time-display">0:00 / 0:00</span>
                     </div>
                     <button class="media-control-btn restart-btn" aria-label="Restart">
-                        <svg viewBox="0 0 24 24" width="24" height="24"><use href="#icon-restart"/></svg>
+                        <svg viewBox="0 0 24 24" width="28" height="28"><use href="#icon-restart"/></svg>
                     </button>
                     <button class="media-control-btn audio-toggle muted" aria-label="Toggle sound">
-                        <svg class="speaker-icon" viewBox="0 0 24 24" width="24" height="24"><use href="#icon-speaker"/></svg>
-                        <svg class="mute-x" viewBox="0 0 24 24" width="24" height="24"><use href="#icon-mute-x"/></svg>
+                        <svg class="icon-unmuted" viewBox="0 0 24 24" width="28" height="28" style="display:none"><use href="#icon-speaker"/></svg>
+                        <svg class="icon-muted" viewBox="0 0 24 24" width="28" height="28"><use href="#icon-speaker-muted"/></svg>
                     </button>
                     <button class="media-control-btn fullscreen-btn" aria-label="Toggle fullscreen">
-                        <svg class="fullscreen-enter" viewBox="0 0 24 24" width="24" height="24"><use href="#icon-fullscreen-enter"/></svg>
-                        <svg class="fullscreen-exit" viewBox="0 0 24 24" width="24" height="24" style="display:none"><use href="#icon-fullscreen-exit"/></svg>
+                        <svg class="fullscreen-enter" viewBox="0 0 24 24" width="28" height="28"><use href="#icon-fullscreen-enter"/></svg>
+                        <svg class="fullscreen-exit" viewBox="0 0 24 24" width="28" height="28" style="display:none"><use href="#icon-fullscreen-exit"/></svg>
                     </button>
                 </div>
             </div>
@@ -105,8 +105,8 @@ const LightboxContent = {
                 <img class="local-media-image" src="${mediaUrl}" alt="Incident media">
                 <div class="media-controls">
                     <button class="media-control-btn fullscreen-btn" aria-label="Toggle fullscreen">
-                        <svg class="fullscreen-enter" viewBox="0 0 24 24" width="24" height="24"><use href="#icon-fullscreen-enter"/></svg>
-                        <svg class="fullscreen-exit" viewBox="0 0 24 24" width="24" height="24" style="display:none"><use href="#icon-fullscreen-exit"/></svg>
+                        <svg class="fullscreen-enter" viewBox="0 0 24 24" width="28" height="28"><use href="#icon-fullscreen-enter"/></svg>
+                        <svg class="fullscreen-exit" viewBox="0 0 24 24" width="28" height="28" style="display:none"><use href="#icon-fullscreen-exit"/></svg>
                     </button>
                 </div>
             </div>

@@ -217,6 +217,12 @@ const MediaControls = {
                 e.stopPropagation();
                 video.muted = !video.muted;
                 audioToggle.classList.toggle('muted', video.muted);
+                const unmutedIcon = audioToggle.querySelector('.icon-unmuted');
+                const mutedIcon = audioToggle.querySelector('.icon-muted');
+                if (unmutedIcon && mutedIcon) {
+                    unmutedIcon.style.display = video.muted ? 'none' : '';
+                    mutedIcon.style.display = video.muted ? '' : 'none';
+                }
             });
         }
 
