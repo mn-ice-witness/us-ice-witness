@@ -23,6 +23,8 @@ us-ice-witness-repo/CONTEXT.md
 - Validation rules
 - Deployment process
 
+It also points to `us-ice-witness-repo/dev-docs/` which has detailed technical docs on every topic (incident schema, media processing, source tiers, etc.). **Read the relevant dev-doc for whatever task you're doing.**
+
 **This file only contains [STATE NAME]-specific information. The master context has everything else.**
 
 If `us-ice-witness-repo/` doesn't exist, create the symlink first:
@@ -60,15 +62,21 @@ See `NEWS-SOURCES.md` for state-specific news sources to monitor.
 "Add this incident: [paste news URL]"
 ```
 
-**Process media:**
-```
-"I put a video in raw_media for the [incident-slug] incident. Process it."
-```
+**Process media (read `us-ice-witness-repo/dev-docs/adding-video-audio.md` for full details):**
+
+1. Put raw video/image in `raw_media/` with correct name (e.g., `YYYY-MM-DD-slug.raw.mov`)
+2. Organize into date folders: `./us-ice-witness-repo/bin/run folderize_media.py --execute`
+3. Process + generate summary: `./us-ice-witness-repo/bin/run run-media-pipeline.py`
+4. Commit the compressed files that appear in `docs/media/`
+
+NEVER commit raw/uncompressed video directly to `docs/media/`. The pipeline compresses videos to 1-6MB. Raw files stay in `raw_media/` which is gitignored.
 
 **Generate summary:**
 ```bash
 ./us-ice-witness-repo/bin/run generate_summary.py
 ```
 
-**Remember: All detailed instructions are in `us-ice-witness-repo/CONTEXT.md`**
+**Remember:**
+- **All detailed instructions are in `us-ice-witness-repo/CONTEXT.md`**
+- **Detailed task docs are in `us-ice-witness-repo/dev-docs/`** — read the relevant one for your task
 ```
